@@ -1,4 +1,27 @@
-MODULE CubN50;  (* PIXIPOGO 50 (25 Nov 2026): HERNE, the boar hunt (Herne1): a wild boar in a forest of 49 x 49, 7 hunters
+MODULE CubN52;  (* PIXIPOGO 52 (25 Nov 2026): the cartridges get the hardware. Pion: "can the games like the tube
+     have the hardware when they need it?" - "do 1": through Pixipogo itself, so a game stays one .mod file that runs
+     wherever Pixipogo runs. Scr2b (file Scr2b.Mod as Scr2.Mod): the tilt of the phone (Touch.TiltX/TiltY/Level), a music
+     sequencer that Pixipogo plays on time (Sound.Seq/Tempo/Loop) and 3D on the graphics card (IMPORT Space: Camera, Fog,
+     Light, Lamp, Cube, Ball, Tri, and the path: Point, Tube, Arc, At, Follow). Ob2c (file Ob2c.Mod as Ob2.Mod) knows them.
+     The canvas draws a 3D frame with OllGL6 and the words of the program over it; a 2D frame as before. First game: tubul2.mod.
+     Same window: ecran-cubn49.dex. Same Desk6, Sal4 (Sal4b).
+       sh cp /sdcard/Download/Ob2c.Mod Ob2.Mod && cp /sdcard/Download/Scr2b.Mod Scr2.Mod && cp /sdcard/Download/CubN52.Mod . && echo "MODULE CubicumN; IMPORT CubN52; END CubicumN." > CubicumN.Mod
+       OLL2.Apk Motor2.Mod OllGL4.Mod OllGL7.Mod OllGL6t.Mod Synth9.Mod Text1.Mod Keys1.Mod Fs2.Mod Clip2.Mod Edit4.Mod Tor11.Mod Ob2.Mod Scr2.Mod Sal4.Mod Spatiu.Mod Arch1.Mod Gazda4.Mod Shell13.Mod Desk6.Mod Zane4.Mod Juno1.Mod Quince1.Mod Ceres1.Mod Files14.Mod Boot5.Mod Pic6.Mod Filme1.Mod Nora18.Mod Herne1.Mod CubN52.Mod CubicumN.Mod "Pixipogo"
+     Back to 51: Ob2b.Mod as Ob2.Mod, the old Scr2.Mod from the backup, CubN51 and IMPORT CubN51:
+       sh cp /sdcard/Download/Ob2b.Mod Ob2.Mod && tar -xf /sdcard/Download/pixipogo-surse.tar Scr2.Mod && echo "MODULE CubicumN; IMPORT CubN51; END CubicumN." > CubicumN.Mod
+   PIXIPOGO 51 (25 Nov 2026): room for big games. Pion: "make it go further, push it to the maximum".
+     The cartridges (.mod games run in the Shell and THE COURT) had room for only 8000 instructions; past that they fell with
+     AN EMPTY CELL IS NOT AN INSTRUCTION. Ob2b (the compiler, file Ob2b.Mod as Ob2.Mod) reaches the variables from GLOB
+     and Sal4b (the kernel, file Sal4b.Mod as Sal4.Mod) puts them right after the code: about 27000 instructions of room,
+     and every Screen/Touch/Sound word and every global costs 3 times less (new DEV and GLOB). The kernel says the room on
+     RUN ("15532 INSTRUCTIONS OF 23483" for herne3.mod) and a program too long gets a clear message. The cartridges also run faster:
+     when a program wants more, it gets up to 8 ms of every frame instead of 20000 instructions.
+     Same window: ecran-cubn49.dex. Same Desk6 (Desk6u).
+       sh cp /sdcard/Download/Ob2b.Mod Ob2.Mod && cp /sdcard/Download/Sal4b.Mod Sal4.Mod && cp /sdcard/Download/CubN51.Mod . && echo "MODULE CubicumN; IMPORT CubN51; END CubicumN." > CubicumN.Mod
+       OLL2.Apk Motor2.Mod OllGL4.Mod OllGL7.Mod OllGL6t.Mod Synth9.Mod Text1.Mod Keys1.Mod Fs2.Mod Clip2.Mod Edit4.Mod Tor11.Mod Ob2.Mod Scr2.Mod Sal4.Mod Spatiu.Mod Arch1.Mod Gazda4.Mod Shell13.Mod Desk6.Mod Zane4.Mod Juno1.Mod Quince1.Mod Ceres1.Mod Files14.Mod Boot5.Mod Pic6.Mod Filme1.Mod Nora18.Mod Herne1.Mod CubN51.Mod CubicumN.Mod "Pixipogo"
+     Back to 50: the old Ob2.Mod and Sal4.Mod from the backup, CubN50 and IMPORT CubN50:
+       sh tar -xf /sdcard/Download/pixipogo-surse.tar Ob2.Mod Sal4.Mod && echo "MODULE CubicumN; IMPORT CubN50; END CubicumN." > CubicumN.Mod
+   PIXIPOGO 50 (25 Nov 2026): HERNE, the boar hunt (Herne1): a wild boar in a forest of 49 x 49, 7 hunters
      with short Gaussians and the dog, 7 with long Gaussians and the mammoth; you are the boar, or WATCH them. In THE COURT.
      Same window: ecran-cubn49.dex. Desk6u.
        sh cp -f /sdcard/Download/ecran-cubn49.dex $EULA_UNELTE/ecran.dex
@@ -300,7 +323,7 @@ MODULE CubN50;  (* PIXIPOGO 50 (25 Nov 2026): HERNE, the boar hunt (Herne1): a w
    Earlier: Cubicum N 4 (player), N 3 (no noise on the SOUND tab), N 2 (cube turns both ways), N 1 (cube + synth).
      Pion & Claude, 11.11.2026 *)
 
-  IMPORT Math, Motor2, OllGL6, Grafica, Synth9, Shell13, Fs2, Sal4, Scr2, Gazda4, Desk6, Files14, Boot5, Zane4, Juno1, Quince1, Ceres1, Nora18, Herne1;
+  IMPORT Ceas, Math, Motor2, OllGL6, Grafica, Synth9, Shell13, Fs2, Sal4, Scr2, Gazda4, Desk6, Files14, Boot5, Zane4, Juno1, Quince1, Ceres1, Nora18, Herne1;
 
   CONST
     HOME = 0; SYNTH = 1; PLAYER = 2; SHELL = 3; CANVAS = 4; APPS = 5; FILES = 6; SETTINGS = 7; BOOT = 8;
@@ -316,9 +339,14 @@ MODULE CubN50;  (* PIXIPOGO 50 (25 Nov 2026): HERNE, the boar hunt (Herne1): a w
   END Pump;
 
   PROCEDURE Tor(ev, val: INTEGER);   (* the Tor7 processes and their lines, in every frame *)
+    VAR t0: INTEGER;
   BEGIN
     IF started THEN
-      IF Sal4.Busy() THEN Sal4.Run(20000) END;
+      IF Sal4.Busy() THEN   (* 20000 instructions, and more while the programs want them, up to 8 ms of the frame *)
+        t0 := Ceas.Ms(); Sal4.Run(20000);
+        WHILE (Sal4.used = 20000) & (Ceas.Ms() - t0 < 8) DO Sal4.Run(20000) END
+      END;
+      Scr2.Tick(Ceas.Ms());   (* the music of the cartridges *)
       Shell13.Pull; Gazda4.Poll; Zane4.MoTick; Zane4.PhTick
     END
   END Tor;
@@ -497,8 +525,14 @@ MODULE CubN50;  (* PIXIPOGO 50 (25 Nov 2026): HERNE, the boar hunt (Herne1): a w
       x := Motor2.X(); y := Motor2.Y(); inX := (x >= W - 64) & (y < 52);
       IF hold & ~Motor2.Jos() THEN hold := FALSE END;
       Scr2.Touch(Motor2.Jos() & ~inX & ~hold, x, y);
-      Scr2.Draw(bg);
-      Grafica.Dreptunghi(W - 58, 6, 52, 40, panel); Grafica.Text(W - 38, 18, "X", 2, Grafica.RGB(239, 68, 68));
+      IF Scr2.Is3D() THEN   (* a 3D program: the graphics card draws its space, then its words, then the X *)
+        Scr2.Draw3D;
+        OllGL6.Dreptunghi2D(W - 58, 6, 52, 40, panel); OllGL6.Text2D(W - 38, 18, "X", 2, OllGL6.RGB(239, 68, 68));
+        OllGL6.Arata; Motor2.Arat
+      ELSE
+        Scr2.Draw(bg);
+        Grafica.Dreptunghi(W - 58, 6, 52, 40, panel); Grafica.Text(W - 38, 18, "X", 2, Grafica.RGB(239, 68, 68))
+      END;
       IF Motor2.Jos() & inX THEN Motor2.SchimbaScena(SHELL) END
     END
   END Canvas;
@@ -539,4 +573,4 @@ BEGIN
   lZane2 := Motor2.Litera("ZANE2", Zane2Scene, {Motor2.Tick}); Motor2.InScene(lZane2, {MUSIC, BOOKS, VIDEO, NOTES, RECORDER, BROWSER, HUNT});
   lP2 := Motor2.Litera("SOUND2", Pump, {Motor2.Tick});
   Motor2.Ruleaza
-END CubN50.
+END CubN52.

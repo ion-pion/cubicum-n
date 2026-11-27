@@ -1,4 +1,12 @@
-MODULE Ob2;  (* OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): ROOM FOR BIG GAMES.
+MODULE Ob2;  (* OBERON-0 FOR TOR7, 4 (25 Nov 2026, Pixipogo 52, file Ob2c.Mod): THE HARDWARE OF PIXIPOGO FOR THE CARTRIDGES.
+       Touch.TiltX() Touch.TiltY() (thousandths of m/s2, right and forward are plus) and Touch.Level (now is zero);
+       Sound.Seq(track, step, note) Sound.Tempo(ms) Sound.Loop(steps): music that Pixipogo plays by itself;
+       IMPORT Space: 3D on the graphics card, in thousandths:
+         Space.Camera(ex, ey, ez, tx, ty, tz) Fov(deg) Fog(near, far) Light(thousandths) Lamp(x, y, z, r, power, c)
+         Space.Cube(x, y, z, size, c) Ball(x, y, z, r, c) Tri(x0, y0, z0, x1, y1, z1, x2, y2, z2, c)
+         the path: Space.Point(i, x, y, z) Tube(from, to, r, sides, c1, c2) Arc(i, a0, a1, r, thick, c) (64ths)
+         At(p, a, r, size, c) Follow(p, ahead, a, lift, look) (p in thousandths of a point, a in 1024ths) Roll(a). They are words of the device (Scr2b), so a frame costs the program little.
+   OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): ROOM FOR BIG GAMES.
        Pion: "make it go further, push it to the maximum". Until now the globals sat at BASE + 32000, so the code had room
        for only 8000 instructions and a longer program wrote its variables over its own code (AN EMPTY CELL...).
        Now every global is reached from GLOB, a place the kernel chooses when it loads the program: right after the
@@ -504,6 +512,27 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): 
       ELSIF Eq(name, "Hz") THEN DevArgs(10, 2, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(21)
       ELSIF Eq(name, "Play") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(22)
       ELSIF Eq(name, "Stop") THEN NoArgs; DevCmd(23)
+      ELSIF Eq(name, "Seq") THEN DevArgs(10, 3, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(24)
+      ELSIF Eq(name, "Tempo") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(25)
+      ELSIF Eq(name, "Loop") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(26)
+      ELSE ok := FALSE
+      END
+    ELSIF Eq(m, "Space") THEN
+      isf := FALSE;
+      IF Eq(name, "Camera") THEN DevArgs(40, 6, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(30)
+      ELSIF Eq(name, "Fov") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(31)
+      ELSIF Eq(name, "Fog") THEN DevArgs(10, 2, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(32)
+      ELSIF Eq(name, "Light") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(33)
+      ELSIF Eq(name, "Lamp") THEN DevArgs(40, 6, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(34)
+      ELSIF Eq(name, "Cube") THEN DevArgs(40, 5, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(35)
+      ELSIF Eq(name, "Ball") THEN DevArgs(40, 5, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(36)
+      ELSIF Eq(name, "Tri") THEN DevArgs(40, 10, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(37)
+      ELSIF Eq(name, "Point") THEN DevArgs(40, 4, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(38)
+      ELSIF Eq(name, "Tube") THEN DevArgs(40, 6, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(39)
+      ELSIF Eq(name, "Arc") THEN DevArgs(40, 6, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(40)
+      ELSIF Eq(name, "At") THEN DevArgs(40, 5, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(41)
+      ELSIF Eq(name, "Follow") THEN DevArgs(40, 5, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(42)
+      ELSIF Eq(name, "Roll") THEN DevArgs(10, 1, TRUE); Check(sRparen, ") IS MISSING"); DevCmd(43)
       ELSE ok := FALSE
       END
     ELSIF Eq(m, "Touch") THEN
@@ -512,6 +541,9 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): 
       ELSIF Eq(name, "X") THEN NoArgs; DevRead(1)
       ELSIF Eq(name, "Y") THEN NoArgs; DevRead(2)
       ELSIF Eq(name, "Tap") THEN NoArgs; DevRead(3); t := tBool
+      ELSIF Eq(name, "TiltX") THEN NoArgs; DevRead(7)
+      ELSIF Eq(name, "TiltY") THEN NoArgs; DevRead(8)
+      ELSIF Eq(name, "Level") THEN NoArgs; isf := FALSE; DevCmd(9)
       ELSE ok := FALSE
       END
     ELSIF Eq(m, "Tor") THEN
@@ -974,8 +1006,8 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): 
     IF sym = sImport THEN
       Get;
       WHILE sym = sIdent DO
-        IF ~(Eq(id, "Out") OR Eq(id, "Tor") OR Eq(id, "Screen") OR Eq(id, "Touch") OR Eq(id, "Sound")) THEN
-          Error("ONLY Out, Tor, Screen, Touch, Sound CAN BE IMPORTED")
+        IF ~(Eq(id, "Out") OR Eq(id, "Tor") OR Eq(id, "Screen") OR Eq(id, "Touch") OR Eq(id, "Sound") OR Eq(id, "Space")) THEN
+          Error("ONLY Out, Tor, Screen, Touch, Sound, Space CAN BE IMPORTED")
         END;
         Get; IF sym = sComma THEN Get END
       END;

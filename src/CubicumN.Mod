@@ -1,1 +1,1 @@
-MODULE CubicumN; IMPORT CubN51; END CubicumN.
+MODULE CubicumN; IMPORT CubN52; END CubicumN.
