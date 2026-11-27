@@ -1,4 +1,14 @@
-MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion: "all three").
+MODULE Ob2;  (* OBERON-0 FOR TOR7, 3 (25 Nov 2026, Pixipogo 51, file Ob2b.Mod): ROOM FOR BIG GAMES.
+       Pion: "make it go further, push it to the maximum". Until now the globals sat at BASE + 32000, so the code had room
+       for only 8000 instructions and a longer program wrote its variables over its own code (AN EMPTY CELL...).
+       Now every global is reached from GLOB, a place the kernel chooses when it loads the program: right after the
+       code. So the code can grow until code + globals + a little stack fill the turn (about 27000 instructions for a
+       game with few globals), and the stack gets all the rest (recursion 49 deep as before). The compiler only says
+       how many words the globals take (gWords); Sal4 (Sal4b) checks that it all fits and says the room.
+       Two new short instructions of the kernel make the programs smaller and faster:
+         GLOB Ra  Ra := the start of the globals (right after the code)   DEV Ra  Ra := the device (Scr2.IO)
+       A Screen, Touch or Sound word cost about 18 instructions (1694851494 in base 7), now 5; a global 8, now 3 to 5.
+   OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion: "all three").
        TYPE P = RECORD x, y: INTEGER; c: CHAR END;  p.x  a[i].y  (records are passed by reference, like arrays;
        a whole array or record can be assigned if it is small: a := b, up to 64 words)
        CASE x OF 1: ... | 2, 3: ... | 5..9: ... | "A": ... ELSE ... END
@@ -26,13 +36,14 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
      Not yet: RECORD, CASE, REAL, strings in variables, nested procedures, bounds checks.
      The machine: R0..R3 hold the expression, R4 is for addresses, R5 is the frame, R6 belongs to the jumps.
      Every variable is a word of 12 cells; data starts at BASE + 32000 (after the code), frames grow upward.
+     (Since version 3: at GLOB, right after the code, chosen by the kernel.)
      Pion & Claude, 11.11.2026 *)
 
   IMPORT Fisier;
 
   CONST
-    SRC = 60000; OUT* = 160000; NID = 24; NSYM = 400; NTYP = 120;
-    GOFF = 32000; TEMPS = 32; IO = 1694851494;   (* the device: Scr1.IO *)
+    SRC = 120000; OUT* = 480000; NID = 24; NSYM = 400; NTYP = 120;
+    TURN = 117649; TEMPS = 32;
     (* symbols *)
     sNull = 0; sTimes = 1; sDiv = 2; sMod = 3; sAnd = 4; sPlus = 5; sMinus = 6; sOr = 7;
     sEql = 9; sNeq = 10; sLss = 11; sLeq = 12; sGtr = 13; sGeq = 14;
@@ -59,7 +70,8 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
     (* types *)
     tForm, tLen, tBase, tSize: ARRAY NTYP OF INTEGER; ntyp, tInt, tBool, tChar: INTEGER;
     (* procedures: the parameters of procedure p are the names sFirst[p] .. sFirst[p] + sNp[p] - 1 *)
-    level, sp, labels, gWords, lWords, frame, spill, maxSpill, curProc: INTEGER;
+    gWords*: INTEGER;   (* the words of the globals: the kernel puts them right after the code *)
+    level, sp, labels, lWords, frame, spill, maxSpill, curProc: INTEGER;
     num: ARRAY 16 OF CHAR; pname: ARRAY NID OF CHAR; txt: ARRAY 200 OF CHAR;
     fName: ARRAY NF, NID OF CHAR; fOwn, fOff, fTyp: ARRAY NF OF INTEGER; nf: INTEGER;   (* the fields of the records *)
     Expression: PROCEDURE (VAR t: INTEGER); StatSeq: PROCEDURE;   (* they call each other *)
@@ -313,7 +325,7 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
 
   PROCEDURE AddrOf(k, r: INTEGER);   (* Rr := the address of variable k (for a VAR parameter: the address it holds) *)
   BEGIN
-    IF sLev[k] = 0 THEN Op1("BASE", r); Const(4, GOFF + 12 * sAdr[k]); Op2("ADD", r, 4)
+    IF sLev[k] = 0 THEN Op1("GLOB", r); IF sAdr[k] # 0 THEN Const(4, 12 * sAdr[k]); Op2("ADD", r, 4) END
     ELSE Const(4, 12 * sAdr[k]); Op2("MOV", r, 5); Op2("ADD", r, 4)
     END;
     IF (sKind[k] = kVarPar) OR (sKind[k] = kPar) & (tForm[sTyp[k]] >= fArray) THEN Op2("LDW", r, r) END
@@ -415,7 +427,7 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
   END NoArgs;
 
   PROCEDURE DevAddr(r, k: INTEGER);   (* Rr := the address of device word k *)
-  BEGIN Const(r, IO + 12 * k)
+  BEGIN Op1("DEV", r); IF k # 0 THEN Const(4, 12 * k); Op2("ADD", r, 4) END   (* r is never R4 *)
   END DevAddr;
 
   PROCEDURE DevArgs(first, n: INTEGER; open: BOOLEAN);   (* n arguments into the device words first.. (one at a time) *)
@@ -971,9 +983,9 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
     END;
     level := 0; gWords := 0;
     Declarations(gWords);
-    IF GOFF + 12 * gWords > 100000 THEN Error("THE GLOBAL VARIABLES DO NOT FIT IN THE TURN") END;
-    (* the start: the frame of the module body comes after the globals *)
-    A("BASE R5"); Nl; Const(4, GOFF + 12 * gWords); Op2("ADD", 5, 4); A("JMP MAIN"); Nl;
+    IF 12 * gWords > TURN - 20000 THEN Error("THE GLOBAL VARIABLES DO NOT FIT IN THE TURN") END;
+    (* the start: the frame of the module body comes after the globals, the stack grows up to the end of the turn *)
+    A("GLOB R5"); Nl; IF gWords > 0 THEN Const(4, 12 * gWords); Op2("ADD", 5, 4) END; A("JMP MAIN"); Nl;
     WHILE ~bad & (sym = sProcedure) DO ProcDecl END;
     main := 0;
     frame := 1 + TEMPS; spill := 0; curProc := -1;
@@ -988,7 +1000,7 @@ MODULE Ob2;  (* OBERON-0 FOR TOR7, 2 (11 Nov 2026): RECORD, CASE and Sound (Pion
   PROCEDURE Compile*(name: ARRAY OF CHAR): BOOLEAN;   (* the Oberon file -> asm; FALSE = err, errLine *)
     VAR h, b: INTEGER; nm: ARRAY 12 OF CHAR;
   BEGIN
-    bad := FALSE; err[0] := 0X; errLine := 0; nasm := 0; asm[0] := 0X;
+    bad := FALSE; err[0] := 0X; errLine := 0; nasm := 0; asm[0] := 0X; gWords := 0;
     nsrc := 0; h := Fisier.Deschide(name);
     IF h < 0 THEN Error("NO SUCH FILE")
     ELSE

@@ -1,4 +1,14 @@
-MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, CASE, Sound); the device is Scr2 (screen,
+MODULE Sal4;  (* SALAMANDRA 4b (25 Nov 2026, Pixipogo 51, file Sal4b.Mod): room for big games, with Ob2b.
+     The globals of an Oberon program now sit right after its code (GLOB = BASE + goff, goff = the end of the code),
+     so the code can grow until code + globals + a little stack fill the turn: about 27000 instructions instead of
+     8000; the stack takes all the rest. Before starting, the kernel checks that it fits (PROGRAM TOO LONG, with the
+     numbers) and says the room: "N INSTRUCTIONS OF M".
+     Two new forms of BASE (op 27): BASE Ra = the turn (as before), GLOB Ra (b = 2) = the globals, DEV Ra (b = 1) = the
+     device Scr2.IO, so a Screen word costs 5 instructions instead of 18. Old .z7 programs run as before.
+     An Oberon program that writes over its own code, or whose calls fill the stack, falls with a clear message.
+     The assembly can be 24000 lines now (NS), the text 480000 letters. Sal4.used: what the last Run used, so Cubicum N
+     can give the programs more of the frame when they want it (CubN51: up to 8 ms of every frame).
+   SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, CASE, Sound); the device is Scr2 (screen,
      touch and sound); the files are in Cubicum FS 2 (7 dimensions).
    SALAMANDRA 3 (11 Nov 2026): the device in the 11th dimension. LD, ST, LDW, STW at an address from Scr2.IO up
      go to the screen and the touch (module Scr1), not to the cells. After Show the process sleeps until the next frame.
@@ -30,7 +40,7 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
 
   IMPORT Ceas, Fisier, Tor11, Synth9, Fs2, Ob2, Scr2;
 
-  CONST NP* = 7; NQ = 64; NO = 49; NS = 8000; NE = 4000; NR = 49; MaxFall = 7; Slice = 64; NI = 80; LL = 44; TXT = 160000;
+  CONST NP* = 7; NQ = 64; NO = 49; NS = 24000; NE = 12000; NR = 49; MaxFall = 7; Slice = 64; NI = 80; LL = 44; TXT = 480000;
     oSYS = 36; oMOV = 3;
     Free* = 0; Active* = 1; Senses* = 2; Receives* = 3; Sleeps* = 4;
 
@@ -41,10 +51,12 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
       r: ARRAY 7 OF INTEGER;
       qv, qs: ARRAY NQ OF INTEGER;
       rs: ARRAY NR OF INTEGER;
-      line: ARRAY LL OF CHAR; nline: INTEGER
+      line: ARRAY LL OF CHAR; nline: INTEGER;
+      goff, room: INTEGER; isMod: BOOLEAN   (* an Oberon program: its globals start at BASE + goff *)
     END;
 
   VAR p: ARRAY NP OF Proc; nextPid, rr: INTEGER;
+    used*: INTEGER;   (* the instructions the last Run used: = budget means the programs wanted more *)
     outL: ARRAY NI, 64 OF CHAR; outC: ARRAY NI OF INTEGER; nout: INTEGER;
     ash: ARRAY 49, LL OF CHAR; nash, ashTotal: INTEGER;
     en, ro: ARRAY NO, 12 OF CHAR; kind: ARRAY NO OF INTEGER;
@@ -181,11 +193,21 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
     op := -1; k := 1;
     WHILE (op < 0) & (k < NO) DO IF Eq(en[k], w) OR Eq(ro[k], w) THEN op := k END; INC(k) END;
     sPre[ns] := -1; f := -1;
-    IF Eq(w, "NOP") THEN f := 6 ELSIF Eq(w, "TURN") OR Eq(w, "TURA") THEN f := 0 ELSIF Eq(w, "FROM") OR Eq(w, "DELA") THEN f := 2
+    IF Eq(w, "DEV") OR Eq(w, "GLOB") THEN f := 99
+    ELSIF Eq(w, "NOP") THEN f := 6 ELSIF Eq(w, "TURN") OR Eq(w, "TURA") THEN f := 0 ELSIF Eq(w, "FROM") OR Eq(w, "DELA") THEN f := 2
     ELSIF Eq(w, "TIME") OR Eq(w, "TIMP") THEN f := 3 ELSIF Eq(w, "PID") THEN f := 11
     ELSIF Eq(w, "STATUS") OR Eq(w, "STARE") THEN f := 14 ELSIF Eq(w, "CLOCK") OR Eq(w, "CEAS") THEN f := 15
     END;
-    IF f >= 0 THEN
+    IF f = 99 THEN   (* DEV Ra / GLOB Ra: BASE with b = 1 / 2 *)
+      sLab[ns, 0] := 0X; sImm[ns] := -1; sSize[ns] := 1;
+      IF nt # 2 THEN Wrong(name, line, "WRONG OPERANDS FOR", tk[0]); ok := FALSE
+      ELSE
+        a := Reg(tk[1]);
+        IF a < 0 THEN Wrong(name, line, "REGISTER R0..R6, NOT", tk[1]); ok := FALSE
+        ELSE sOp[ns] := 27; sA[ns] := a; IF Eq(w, "DEV") THEN sB[ns] := 1 ELSE sB[ns] := 2 END; INC(ns)
+        END
+      END
+    ELSIF f >= 0 THEN
       sLab[ns, 0] := 0X; sImm[ns] := -1; sSize[ns] := 1; a := 0; b := f MOD 10;
       IF (f = 6) & (nt # 1) OR (f < 6) & (nt # 2) OR (f > 10) & (nt # 3) THEN Wrong(name, line, "WRONG OPERANDS FOR", tk[0]); ok := FALSE
       ELSIF f # 6 THEN
@@ -327,7 +349,17 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
   PROCEDURE Compile(s: INTEGER; name: ARRAY OF CHAR): INTEGER;
     VAR n: INTEGER;
   BEGIN
-    IF Source(name) THEN n := Assemble(name, s * Tor11.Turn) ELSE n := -1 END
+    IF Source(name) THEN n := Assemble(name, s * Tor11.Turn) ELSE n := -1 END;
+    IF n >= 0 THEN
+      IF IsMod(name) THEN   (* the globals right after the code, then the stack; 7000 cells kept for the stack *)
+        p[s].isMod := TRUE; p[s].goff := n * 4; p[s].room := (Tor11.Turn - 12 * Ob2.gWords - 7000) DIV 4;
+        IF n > p[s].room THEN
+          Clr; Add(name); Add(": PROGRAM TOO LONG, "); AddN(n); Add(" INSTRUCTIONS, ROOM FOR "); AddN(p[s].room);
+          Say(2); ToAsh; n := -1
+        END
+      ELSE p[s].isMod := FALSE; p[s].goff := 32000
+      END
+    END
     RETURN n
   END Compile;
 
@@ -436,7 +468,8 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
       ELSE
         Copy(nm, p[s].name); p[s].len := n; p[s].falls := 0; p[s].pid := nextPid; INC(nextPid);
         Fresh(s); p[s].state := Active;
-        Clr; Add("KERNEL: "); Add(nm); Add(" ON TURN "); AddN(s + 1); Add(", "); AddN(n); Add(" INSTRUCTIONS"); Say(1)
+        Clr; Add("KERNEL: "); Add(nm); Add(" ON TURN "); AddN(s + 1); Add(", "); AddN(n); Add(" INSTRUCTIONS");
+        IF p[s].isMod THEN Add(" OF "); AddN(p[s].room) END; Say(1)
       END
     END
     RETURN s
@@ -496,6 +529,7 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
         ELSIF op = 18 THEN IF va # 0 THEN p[s].pc := vb END
         ELSIF op = 19 THEN
           IF p[s].nrs >= NR THEN Fall(s, "CALL TOO DEEP (49)"); cont := FALSE
+          ELSIF p[s].isMod & (p[s].r[5] > (s + 1) * Tor11.Turn - 2000) THEN Fall(s, "THE STACK IS FULL (CALLS TOO DEEP)"); cont := FALSE
           ELSE p[s].rs[p[s].nrs] := p[s].pc; INC(p[s].nrs); p[s].pc := va
           END
         ELSE
@@ -507,6 +541,8 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
         IF op = 21 THEN IF Scr2.Is(vb) THEN p[s].r[a] := Scr2.Read(vb) ELSE p[s].r[a] := Tor11.Word(vb) END
         ELSIF op = 22 THEN
           IF Scr2.Is(vb) THEN IF Scr2.Write(vb, va) THEN p[s].state := Sleeps; p[s].wake := now + 15; cont := FALSE END
+          ELSIF p[s].isMod & (vb + 11 >= s * Tor11.Turn) & (vb < s * Tor11.Turn + p[s].len * 4) THEN
+            Fall(s, "A WRITE OVER ITS OWN CODE"); cont := FALSE
           ELSE Tor11.PutWord(vb, va); cont := FALSE
           END
         ELSIF op = 23 THEN p[s].r[a] := Tor11.Step(va, vb)
@@ -516,7 +552,9 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
           IF Tor11.Writes() > p[s].seenW THEN p[s].seenW := Tor11.Writes()
           ELSE DEC(p[s].pc); p[s].state := Senses; cont := FALSE
           END
-        ELSE p[s].r[a] := s * Tor11.Turn
+        ELSIF b = 1 THEN p[s].r[a] := Scr2.IO   (* DEV *)
+        ELSIF b = 2 THEN p[s].r[a] := s * Tor11.Turn + p[s].goff   (* GLOB *)
+        ELSE p[s].r[a] := s * Tor11.Turn   (* BASE *)
         END
       | 4:
         IF op = 28 THEN p[s].r[a] := Tor11.State(vb)
@@ -589,7 +627,7 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
   PROCEDURE Run*(budget: INTEGER);   (* at most budget instructions, shared in turn *)
     VAR now, s, k, n: INTEGER; any, cont: BOOLEAN;
   BEGIN
-    now := Ceas.Ms();
+    now := Ceas.Ms(); used := budget;
     REPEAT
       any := FALSE;
       FOR k := 0 TO NP - 1 DO
@@ -602,6 +640,7 @@ MODULE Sal4;  (* SALAMANDRA 4 (11 Nov 2026): Oberon is compiled by Ob2 (RECORD, 
         END
       END
     UNTIL ~any OR (budget <= 0);
+    used := used - budget;
     rr := (rr + 1) MOD NP
   END Run;
 
@@ -653,6 +692,6 @@ BEGIN
   Mn(42, "SEND", "TRIMITE", 2); Mn(43, "RECV", "PRIMESTE", 2); Mn(44, "NEIGHBOR", "VECIN", 1); Mn(45, "SPAWN", "PORN", 2);
   Mn(46, "KILL", "OPR", 1); Mn(47, "STOP", "STOP", 0); Mn(48, "YIELD", "CEDEAZA", 0);
   nextPid := 2; rr := 0; nout := 0; nash := 0; ashTotal := 0;
-  FOR rr := 0 TO NP - 1 DO p[rr].state := Free; p[rr].pid := 0; p[rr].nline := 0 END;
+  FOR rr := 0 TO NP - 1 DO p[rr].state := Free; p[rr].pid := 0; p[rr].nline := 0; p[rr].goff := 32000; p[rr].room := 0; p[rr].isMod := FALSE END;
   rr := 0
 END Sal4.

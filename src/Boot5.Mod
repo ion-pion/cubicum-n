@@ -1,4 +1,8 @@
-MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4, Gazda3 (which asks the host for its
+MODULE Boot5;  (* BOOT 5c (21 Nov 2026, Pixipogo 30): it says PIXIPOGO 30 under the name.
+  BOOT 5b (20 Nov 2026, Cubicum N 27): the system is called PIXIPOGO (Pion: "and we have pi, 3.14, in the title"): PI in gold.
+  BOOT 5 (20 Nov 2026, Cubicum N 19): the court of Oberon wakes up.
+   BOOT 4 (20 Nov 2026, Cubicum N 18): Boot 3 with Desk5 and Gazda4.
+   BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4, Gazda3 (which asks the host for its
      apps while the boot runs).
    BOOT 2 (19 Nov 2026, Cubicum N 16): instead of the short high notes, a sweep over the keys of the synth:
      from the lowest note of the cube up two octaves (1 9/8 5/4 3/2 5/3 2 ...), one note as each part of the cube
@@ -9,7 +13,7 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
      then CUBICUM N 15 . READY. About 4.5 seconds; a tap skips it. SETTINGS can turn it off or show it again.
    Pion & Claude, 19.11.2026 *)
 
-  IMPORT Math, Ceas, OllGL6, Desk4, Gazda3, Fs2, Synth9;
+  IMPORT Math, Ceas, OllGL6, Desk6, Gazda4, Fs2, Synth9;
 
   CONST VOID = 700; EGG = 1500; CUBE = 3700; END0 = 4600; STEP = 360;
 
@@ -39,16 +43,16 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
     VAR h: ARRAY 24 OF CHAR;
   BEGIN
     s[0] := 0X;
-    IF k = 0 THEN Add(s, "CUBICUM N 17 . BUILD Z7")
+    IF k = 0 THEN Add(s, "PIXIPOGO 30 . BUILD Z7")
     ELSIF k = 1 THEN Add(s, ". INITIALIZING Z7 . 343 NODES")
     ELSIF k = 2 THEN Add(s, ". LOADING SALAMANDRA FROM THE EGG")
     ELSIF k = 3 THEN Add(s, ". IGNITING 5 CLOCKS /1 /2 /3 /5 /7")
     ELSIF k = 4 THEN Add(s, ". MOUNTING CUBICUM FS . "); AddN(s, Fs2.Count()); Add(s, " FILES")
     ELSIF k = 5 THEN
-      IF Gazda3.Hosted() THEN Add(s, ". HOST FOUND . "); Gazda3.System(h); Add(s, h)
+      IF Gazda4.Hosted() THEN Add(s, ". HOST FOUND . "); Gazda4.System(h); Add(s, h)
       ELSE Add(s, ". NO HOST . BARE METAL")
       END
-    ELSIF k = 6 THEN Add(s, ". STARTING DESK . TOR7 . SYNTH")
+    ELSIF k = 6 THEN Add(s, ". WAKING THE FAIRIES . ARIEL . PUCK . ROBIN")
     ELSE Add(s, "READY . PION (JAHBALON) . 2026")
     END
   END Line;
@@ -94,7 +98,7 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
       e := t - d * 450;
       IF e > 0 THEN
         s := FLT(e) / 300.0; IF s > 1.0 THEN s := 1.0 END;
-        IF d = 0 THEN OllGL6.Cub(0.0, 0.0, 0.0, 0.62 * s, Desk4.Accent())
+        IF d = 0 THEN OllGL6.Cub(0.0, 0.0, 0.0, 0.62 * s, Desk6.Accent())
         ELSE
           ad := x + y + z;
           OllGL6.Cub(FLT(x - 3), FLT(y - 3), FLT(z - 3), 0.34 * s, OllGL6.RGB(30 + x * 18, 30 + y * 18, 50 + z * 18 + ad MOD 2 * 6))
@@ -110,10 +114,10 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
     FOR k := 0 TO 4 DO
       IF k = 0 THEN d := 1 ELSIF k = 1 THEN d := 2 ELSIF k = 2 THEN d := 3 ELSIF k = 3 THEN d := 5 ELSE d := 7 END;
       x := W DIV 2 - 160 + k * 80;
-      IF (beat MOD d = 0) & (t MOD 240 < 120) THEN OllGL6.Cerc2D(x, 110, 20, Desk4.Accent())
-      ELSE OllGL6.Inel2D(x, 110, 20, 2, Desk4.edge)
+      IF (beat MOD d = 0) & (t MOD 240 < 120) THEN OllGL6.Cerc2D(x, 110, 20, Desk6.Accent())
+      ELSE OllGL6.Inel2D(x, 110, 20, 2, Desk6.edge)
       END;
-      s[0] := "/"; s[1] := CHR(ORD("0") + d); s[2] := 0X; Desk4.Centre(x, 140, s, 1, Desk4.muted)
+      s[0] := "/"; s[1] := CHR(ORD("0") + d); s[2] := 0X; Desk6.Centre(x, 140, s, 1, Desk6.muted)
     END
   END Clocks;
 
@@ -124,7 +128,7 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
   PROCEDURE Frame*(isDown: BOOLEAN): BOOLEAN;   (* TRUE = the boot is over *)
     VAR t, k, n, r, w: INTEGER; s: ARRAY 48 OF CHAR; done: BOOLEAN;
   BEGIN
-    Gazda3.Poll;
+    Gazda4.Poll;
     t := Ceas.Ms() - t0; done := t >= END0;
     IF isDown & ~wasDown & (t > 400) THEN done := TRUE END;
     wasDown := isDown;
@@ -138,13 +142,13 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
       IF nn > 3 THEN Note(nx[3], ny[3], nz[3], 2600) END; IF nn > 5 THEN Note(nx[5], ny[5], nz[5], 2600) END
     END;
     IF t < VOID THEN   (* the void: a point that grows *)
-      r := 2 + t DIV 70; OllGL6.Cerc2D(cx, cy, r, Desk4.Accent());
-      OllGL6.Inel2D(cx, cy, 10 + t DIV 6, 1, Desk4.edge)
+      r := 2 + t DIV 70; OllGL6.Cerc2D(cx, cy, r, Desk6.Accent());
+      OllGL6.Inel2D(cx, cy, 10 + t DIV 6, 1, Desk6.edge)
     ELSIF t < EGG THEN   (* the egg, breathing *)
       r := 34 + FLOOR(Math.sin(FLT(t) / 90.0) * 3.0);
-      OllGL6.Inel2D(cx, cy, r * 2 + (t - VOID) DIV 20, 2, Desk4.edge);
-      Egg(r + 4, Desk4.surface2); Egg(r, Desk4.Accent());
-      IF t > EGG - 260 THEN OllGL6.Linie2D(cx - 14, cy - 10, cx + 4, cy + 6, 2, Desk4.dark); OllGL6.Linie2D(cx + 4, cy + 6, cx + 16, cy - 4, 2, Desk4.dark) END
+      OllGL6.Inel2D(cx, cy, r * 2 + (t - VOID) DIV 20, 2, Desk6.edge);
+      Egg(r + 4, Desk6.surface2); Egg(r, Desk6.Accent());
+      IF t > EGG - 260 THEN OllGL6.Linie2D(cx - 14, cy - 10, cx + 4, cy + 6, 2, Desk6.dark); OllGL6.Linie2D(cx + 4, cy + 6, cx + 16, cy - 4, 2, Desk6.dark) END
     ELSE Salamandra(t - EGG)
     END;
     IF t >= EGG - 200 THEN Clocks(t) END;
@@ -152,15 +156,15 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
     n := (t - 300) DIV STEP + 1; IF n > 8 THEN n := 8 END;
     FOR k := 0 TO n - 1 DO
       Line(k, s);
-      IF k = 7 THEN OllGL6.Text2D(24, H - 330 + k * 26, s, 2, Desk4.Accent()) ELSE OllGL6.Text2D(24, H - 330 + k * 26, s, 2, Desk4.muted) END
+      IF k = 7 THEN OllGL6.Text2D(24, H - 330 + k * 26, s, 2, Desk6.Accent()) ELSE OllGL6.Text2D(24, H - 330 + k * 26, s, 2, Desk6.muted) END
     END;
     w := (W - 48) * t DIV END0; IF w > W - 48 THEN w := W - 48 END;
-    OllGL6.Rotund2D(24, H - 98, W - 48, 10, 5, Desk4.surface); IF w > 10 THEN OllGL6.Rotund2D(24, H - 98, w, 10, 5, Desk4.Accent()) END;
+    OllGL6.Rotund2D(24, H - 98, W - 48, 10, 5, Desk6.surface); IF w > 10 THEN OllGL6.Rotund2D(24, H - 98, w, 10, 5, Desk6.Accent()) END;
     IF t >= CUBE THEN
-      Desk4.Centre(W DIV 2, 190, "CUBICUM N 17", 6, Desk4.text);
-      Desk4.Centre(W DIV 2, 250, "READY", 3, Desk4.Accent())
+      OllGL6.Text2D(W DIV 2 - 144, 190, "PI", 6, Desk6.Accent()); OllGL6.Text2D(W DIV 2 - 144 + 72, 190, "XIPOGO", 6, Desk6.text);
+      Desk6.Centre(W DIV 2, 250, "READY", 3, Desk6.Accent()); Desk6.Centre(W DIV 2, 290, "PIXIPOGO 30 . CUBICUM N", 2, Desk6.muted)
     END;
-    Desk4.Centre(W DIV 2, H - 60, "TAP TO SKIP", 1, Desk4.edge);
+    Desk6.Centre(W DIV 2, H - 60, "TAP TO SKIP", 1, Desk6.edge);
     OllGL6.Arata
     RETURN done
   END Frame;
@@ -197,4 +201,4 @@ MODULE Boot3;  (* BOOT 3 (19 Nov 2026, Cubicum N 17): Boot 2 with OllGL6, Desk4,
   END Start;
 
 BEGIN W := 1; H := 1; t0 := 0; played := 0; wasDown := FALSE; cx := 0; cy := 0; nn := 0
-END Boot3.
+END Boot5.

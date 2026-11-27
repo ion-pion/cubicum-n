@@ -1,4 +1,36 @@
-MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host the icons ate every triangle of the frame
+MODULE Desk6;  (* DESK 6u (25 Nov 2026, Pixipogo 50): HERNE the boar hunt is own program 17 in THE COURT (action 22,
+     icon 24: a boar in the forest); ABOUT 50.
+   DESK 6t (24 Nov 2026, Pixipogo 49): ABOUT 49 (Nora 18: share, private tabs, saved pages).
+   DESK 6s (24 Nov 2026, Pixipogo 48): ABOUT 48 (Nora 17: tabs and downloads of any size).
+   DESK 6r (24 Nov 2026, Pixipogo 47): ABOUT 47 (Nora 16: NewPipe and the films given freely, Filme 1).
+   DESK 6q (24 Nov 2026, Pixipogo 46): ABOUT 46 (Nora 15: YouTube and TikTok in the window into the whole web).
+   DESK 6p (24 Nov 2026, Pixipogo 45): ABOUT 45 (Nora 14, Pic 6: smoother pictures).
+   DESK 6o (24 Nov 2026, Pixipogo 44): ABOUT 44 (pictures on the graphics card: OllGL7, Pic5, Nora 13).
+   DESK 6n (24 Nov 2026, Pixipogo 43): the browser is NORA again (Pion: "take out chick"); ABOUT 43.
+   DESK 6m (23 Nov 2026, Pixipogo 42): only ABOUT changes (PIXIPOGO 42, NORACHICK 11, PIC 3).
+   DESK 6l (23 Nov 2026, Pixipogo 41): only ABOUT changes (PIXIPOGO 41, NORACHICK 10).
+   DESK 6k (23 Nov 2026, Pixipogo 39): only ABOUT changes (PIXIPOGO 39, NORACHICK 9).
+   DESK 6j (23 Nov 2026, Pixipogo 38): only ABOUT changes (PIXIPOGO 38, NORACHICK 8, PIC 2).
+   DESK 6i (23 Nov 2026, Pixipogo 37): only ABOUT changes (PIXIPOGO 37, NORACHICK 7, PIC 1).
+   DESK 6h (23 Nov 2026, Pixipogo 36): only ABOUT changes (PIXIPOGO 36, NORACHICK 6).
+   DESK 6g (23 Nov 2026, Pixipogo 35): only ABOUT changes (PIXIPOGO 35, NORACHICK 5).
+   DESK 6f (23 Nov 2026, Pixipogo 34): NORACHICK the browser sits in the dock next to ARIEL, where ECHO
+     was (Pion: "the button should sit in the bottom bar next to synth; just take the player out and move it").
+     ECHO stays in THE COURT. NoraChick is own program 16 there too (action 21, icon 23: a globe).
+   DESK 6e (21 Nov 2026, Pixipogo 30): QUINCE the notebook (action 19, icon 21, and the icon of .txt) and
+     CERES the recorder (action 20, icon 22); .amr is a sound too.
+   DESK 6d (20 Nov 2026, Cubicum N 28): JUNO, the films (action 18), icon 20 (a strip of film), and the
+     icon of video files.
+   DESK 6c (20 Nov 2026, Cubicum N 27): the system is PIXIPOGO (tab, ABOUT, the messages).
+  DESK 6b (20 Nov 2026, Cubicum N 24): two more fairies, PHILOMEL music (action 16) and PEASEBLOSSOM books
+     (action 17), their icons (18 a note, 19 a book) and the icons of sound files and of .pdf.
+   DESK 6 (20 Nov 2026, Cubicum N 19): the court of Oberon. Pion: "Oberon still needs fairies ... let all the
+     programs have fairy names". ARIEL synth, ECHO player, OBERON shell, MAB canvas, COBWEB files, TITANIA settings,
+     PUCK tasks, MUSTARDSEED calc, MOTH clock, IRIS images, ROBIN help; APPS is THE COURT. Under each name, small,
+     what it does. FairyName and Job give them to the other screens.
+   DESK 5 (20 Nov 2026, Cubicum N 18): the new tools in APPS (TASKS, CALC, CLOCK, IMAGES, HELP), their icons,
+     and the actions 11..15 for them.
+   DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host the icons ate every triangle of the frame
      and the title and the tabs were gone: now OllGL6 (40000 triangles) and each icon takes less detail when the frame
      fills up (32, 16, 8 squares, then only its colour), so the header and the bars always have room. An icon not read yet
      is a grey square.
@@ -6,7 +38,8 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
      colours; BYZ7 and INSTALL open the terminal activity of their app.
    DESK 2 (19 Nov 2026, Cubicum N 15): Desk 1 plus SETTINGS (accent colour, boot animation, the cube that
      turns by itself, FPS; ABOUT) kept in desk.cfg, FILES in the dock, and one list of actions for all screens:
-     -1 HOME, 1 SYNTH, 2 PLAYER, 3 SHELL, 4 APPS, 5 CANVAS, 6 FILES, 7 SETTINGS, 8 BOOT again, 10 RUN the chosen program.
+     -1 HOME, 1 SYNTH, 2 PLAYER, 3 SHELL, 4 APPS, 5 CANVAS, 6 FILES, 7 SETTINGS, 8 BOOT again, 10 RUN the chosen program,
+     11 TASKS, 12 CALC, 13 CLOCK, 14 IMAGES, 15 HELP.
    DESK 1 (19 Nov 2026): the desktop of Cubicum N 14. Pion: "I want Cubicum N to look like a
      professional operating system (even if it is only a game)".
    The status bar (clock, the host, battery), the clock on the home screen, the dock (SYNTH, PLAYER, SHELL, APPS)
@@ -17,7 +50,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
    The host comes from Gazda1; with no host (bare metal) the last two tabs say so.
    Pion & Claude, 19.11.2026 *)
 
-  IMPORT OllGL6, Gazda3, Fs2, Fisier;
+  IMPORT OllGL6, Gazda4, Fs2, Fisier;
 
   CONST
     NI = 300;   (* items in the drawer *)
@@ -92,7 +125,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   BEGIN OllGL6.Text2D(cx - (Len(s) * 6 * m - m) DIV 2, y, s, m, c)
   END Centre;
 
-  PROCEDURE Right(rx, y: INTEGER; s: ARRAY OF CHAR; m, c: INTEGER);
+  PROCEDURE Right*(rx, y: INTEGER; s: ARRAY OF CHAR; m, c: INTEGER);
   BEGIN OllGL6.Text2D(rx - (Len(s) * 6 * m - m), y, s, m, c)
   END Right;
 
@@ -141,12 +174,12 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   BEGIN
     OllGL6.Dreptunghi2D(0, 0, W, BAR, dark);
     s[0] := 0X; k := 0;
-    IF Gazda3.HasClock() THEN Two(Gazda3.Clock(3), s, k); s[k] := ":"; INC(k); Two(Gazda3.Clock(4), s, k) ELSE s := "--:--" END;
+    IF Gazda4.HasClock() THEN Two(Gazda4.Clock(3), s, k); s[k] := ":"; INC(k); Two(Gazda4.Clock(4), s, k) ELSE s := "--:--" END;
     OllGL6.Text2D(16, 13, s, 2, text);
-    Gazda3.System(s); Centre(W DIV 2, 16, s, 1, muted);
-    b := Gazda3.Battery();
+    Gazda4.System(s); Centre(W DIV 2, 16, s, 1, muted);
+    b := Gazda4.Battery();
     IF b >= 0 THEN
-      c := text; IF b <= 15 THEN c := red ELSIF Gazda3.Charging() THEN c := green END;
+      c := text; IF b <= 15 THEN c := red ELSIF Gazda4.Charging() THEN c := green END;
       OllGL6.Rotund2D(W - 46, 12, 30, 16, 3, muted); OllGL6.Rotund2D(W - 44, 14, 26, 12, 2, dark);
       OllGL6.Dreptunghi2D(W - 16, 17, 3, 6, muted);
       fill := 24 * b DIV 100; IF fill < 1 THEN fill := 1 END;
@@ -169,21 +202,21 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     VAR r, b, i0, c, p, st, free: INTEGER;
   BEGIN
     free := OllGL6.Liber2D();
-    IF ~Gazda3.IconReady(i) THEN OllGL6.Rotund2D(x + 4, y + 4, sz - 8, sz - 8, sz DIV 5, surface2)   (* still coming *)
+    IF ~Gazda4.IconReady(i) THEN OllGL6.Rotund2D(x + 4, y + 4, sz - 8, sz - 8, sz DIV 5, surface2)   (* still coming *)
     ELSIF free < 5000 THEN   (* the frame is almost full: only the colour of its middle *)
-      c := Gazda3.Pixel(i, Gazda3.IC DIV 2, Gazda3.IC DIV 2); IF c = 0 THEN c := edge END;
+      c := Gazda4.Pixel(i, Gazda4.IC DIV 2, Gazda4.IC DIV 2); IF c = 0 THEN c := edge END;
       OllGL6.Rotund2D(x + 4, y + 4, sz - 8, sz - 8, sz DIV 5, c)
     ELSE
       IF free > 20000 THEN st := 1 ELSIF free > 11000 THEN st := 2 ELSE st := 4 END;
-      p := sz DIV Gazda3.IC * st;
+      p := sz DIV Gazda4.IC * st;
       r := 0;
-      WHILE r < Gazda3.IC DO
+      WHILE r < Gazda4.IC DO
         b := 0;
-        WHILE b < Gazda3.IC DO
-          c := Gazda3.Pixel(i, b, r);
+        WHILE b < Gazda4.IC DO
+          c := Gazda4.Pixel(i, b, r);
           IF c # 0 THEN
             i0 := b; b := b + st;
-            WHILE (b < Gazda3.IC) & (Gazda3.Pixel(i, b, r) # 0) & Near(Gazda3.Pixel(i, b, r), c) DO b := b + st END;
+            WHILE (b < Gazda4.IC) & (Gazda4.Pixel(i, b, r) # 0) & Near(Gazda4.Pixel(i, b, r), c) DO b := b + st END;
             OllGL6.Dreptunghi2D(x + i0 * p DIV st, y + r * p DIV st, (b - i0) * p DIV st, p, c)
           ELSE b := b + st
           END
@@ -207,7 +240,11 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   END Sin8;
 
   PROCEDURE Glyph*(kind, x, y, sz: INTEGER);   (* the drawn icons of Cubicum N: 0 synth 1 player 2 shell 3 apps 4 canvas
-                                                  5 install 6 byz7 7 .mod 8 .z7 9 files 10 settings 11 .z7c 12 text *)
+                                                  5 install 6 byz7 7 .mod 8 .z7 9 files 10 settings 11 .z7c 12 text
+                                                  13 tasks 14 calc 15 clock 16 images (and a picture file) 17 help
+                                                  18 music (and a sound file) 19 books (and a .pdf) 20 films (and a video)
+                                                  21 notes (and a .txt) 22 the recorder 23 the web (NoraChick)
+                                                  24 the hunt (Herne) *)
     VAR k, u, c: INTEGER;
   BEGIN
     u := sz DIV 8;
@@ -215,7 +252,14 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     ELSIF kind = 4 THEN c := cyan ELSIF kind = 5 THEN c := OllGL6.RGB(236, 112, 99) ELSIF kind = 6 THEN c := OllGL6.RGB(90, 60, 140)
     ELSIF kind = 7 THEN c := OllGL6.RGB(40, 110, 160) ELSIF kind = 8 THEN c := OllGL6.RGB(150, 100, 20)
     ELSIF kind = 9 THEN c := OllGL6.RGB(56, 120, 200) ELSIF kind = 10 THEN c := OllGL6.RGB(90, 90, 110)
-    ELSIF kind = 11 THEN c := OllGL6.RGB(110, 50, 170) ELSE c := OllGL6.RGB(70, 70, 90)
+    ELSIF kind = 11 THEN c := OllGL6.RGB(110, 50, 170) ELSIF kind = 13 THEN c := OllGL6.RGB(20, 90, 80)
+    ELSIF kind = 14 THEN c := OllGL6.RGB(60, 60, 72) ELSIF kind = 15 THEN c := OllGL6.RGB(30, 30, 40)
+    ELSIF kind = 16 THEN c := OllGL6.RGB(80, 150, 220) ELSIF kind = 17 THEN c := OllGL6.RGB(200, 90, 40)
+    ELSIF kind = 18 THEN c := OllGL6.RGB(170, 40, 110) ELSIF kind = 19 THEN c := OllGL6.RGB(190, 60, 60)
+    ELSIF kind = 20 THEN c := OllGL6.RGB(40, 40, 60) ELSIF kind = 21 THEN c := OllGL6.RGB(70, 120, 90)
+    ELSIF kind = 22 THEN c := OllGL6.RGB(200, 50, 70) ELSIF kind = 23 THEN c := OllGL6.RGB(24, 70, 120)
+    ELSIF kind = 24 THEN c := OllGL6.RGB(34, 90, 44)
+    ELSE c := OllGL6.RGB(70, 70, 90)
     END;
     OllGL6.Rotund2D(x, y, sz, sz, sz DIV 4, c);
     IF kind = 2 THEN OllGL6.Inel2D(x + sz DIV 2, y + sz DIV 2, sz DIV 2 - 1, 1, edge) END;
@@ -249,6 +293,69 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
       OllGL6.Triunghi2D(x + u, y + 5 * u DIV 2, x + 4 * u, y + 7 * u, x + u, y + 11 * u DIV 2, text);
       OllGL6.Triunghi2D(x + 4 * u, y + 4 * u, x + 7 * u, y + 5 * u DIV 2, x + 7 * u, y + 11 * u DIV 2, muted);
       OllGL6.Triunghi2D(x + 4 * u, y + 4 * u, x + 7 * u, y + 11 * u DIV 2, x + 4 * u, y + 7 * u, muted)
+    ELSIF kind = 13 THEN   (* tasks: the seven turns of the spiral *)
+      FOR k := 0 TO 6 DO
+        OllGL6.Cerc2D(x + 4 * u + FLOOR(FLT(u) * (0.4 + 0.4 * FLT(k)) * Cos8(k * 3)), y + 4 * u + FLOOR(FLT(u) * (0.4 + 0.4 * FLT(k)) * Sin8(k * 3)),
+          u DIV 3 + 2, green)
+      END
+    ELSIF kind = 14 THEN   (* calc: keys *)
+      OllGL6.Rotund2D(x + 3 * u DIV 2, y + 3 * u DIV 2, 5 * u, 3 * u DIV 2, 3, OllGL6.RGB(160, 220, 170));
+      FOR k := 0 TO 5 DO OllGL6.Rotund2D(x + 3 * u DIV 2 + (k MOD 3) * 7 * u DIV 4, y + 7 * u DIV 2 + (k DIV 3) * 3 * u DIV 2, 3 * u DIV 2, u + 2, 3, text) END
+    ELSIF kind = 15 THEN   (* clock: a dial and two hands *)
+      OllGL6.Cerc2D(x + 4 * u, y + 4 * u, 3 * u, text); OllGL6.Cerc2D(x + 4 * u, y + 4 * u, 3 * u - 3, c);
+      OllGL6.Linie2D(x + 4 * u, y + 4 * u, x + 4 * u, y + 2 * u, 3, gold); OllGL6.Linie2D(x + 4 * u, y + 4 * u, x + 11 * u DIV 2, y + 4 * u, 3, text)
+    ELSIF kind = 16 THEN   (* images: a hill and the sun *)
+      OllGL6.Rotund2D(x + 3 * u DIV 2, y + 3 * u DIV 2, 5 * u, 5 * u, u DIV 2, OllGL6.RGB(200, 230, 255));
+      OllGL6.Cerc2D(x + 5 * u, y + 3 * u, u, gold);
+      OllGL6.Triunghi2D(x + 3 * u DIV 2, y + 13 * u DIV 2, x + 7 * u DIV 2, y + 7 * u DIV 2, x + 6 * u, y + 13 * u DIV 2, OllGL6.RGB(40, 140, 70))
+    ELSIF kind = 17 THEN OllGL6.Text2D(x + 5 * u DIV 2, y + 2 * u, "?", sz DIV 13, text)
+    ELSIF kind = 18 THEN   (* music: two notes on a beam *)
+      OllGL6.Cerc2D(x + 5 * u DIV 2, y + 11 * u DIV 2, u, text); OllGL6.Cerc2D(x + 11 * u DIV 2, y + 5 * u, u, text);
+      OllGL6.Dreptunghi2D(x + 7 * u DIV 2 - 3, y + 2 * u, 3, 7 * u DIV 2, text); OllGL6.Dreptunghi2D(x + 13 * u DIV 2 - 3, y + 3 * u DIV 2, 3, 7 * u DIV 2, text);
+      OllGL6.Triunghi2D(x + 7 * u DIV 2 - 3, y + 2 * u, x + 13 * u DIV 2, y + 3 * u DIV 2 - 2, x + 13 * u DIV 2, y + 5 * u DIV 2 - 2, gold);
+      OllGL6.Triunghi2D(x + 7 * u DIV 2 - 3, y + 2 * u, x + 13 * u DIV 2, y + 5 * u DIV 2 - 2, x + 7 * u DIV 2 - 3, y + 3 * u, gold)
+    ELSIF kind = 20 THEN   (* films: a strip with its holes, a play sign in the middle *)
+      OllGL6.Rotund2D(x + u, y + 3 * u DIV 2, 6 * u, 5 * u, u DIV 2, text);
+      FOR k := 0 TO 4 DO
+        OllGL6.Dreptunghi2D(x + 3 * u DIV 2 + k * 5 * u DIV 4, y + 2 * u, u DIV 2 + 1, u DIV 2 + 1, c);
+        OllGL6.Dreptunghi2D(x + 3 * u DIV 2 + k * 5 * u DIV 4, y + 11 * u DIV 2, u DIV 2 + 1, u DIV 2 + 1, c)
+      END;
+      OllGL6.Triunghi2D(x + 7 * u DIV 2, y + 3 * u, x + 7 * u DIV 2, y + 5 * u, x + 5 * u, y + 4 * u, gold)
+    ELSIF kind = 21 THEN   (* notes: a page with lines and a pencil *)
+      OllGL6.Rotund2D(x + 3 * u DIV 2, y + u, 5 * u, 6 * u, u DIV 2, text);
+      FOR k := 0 TO 3 DO OllGL6.Dreptunghi2D(x + 2 * u, y + 2 * u + k * u * 5 DIV 4, 4 * u - 2 * (k MOD 2) * u DIV 2, 2, muted) END;
+      OllGL6.Triunghi2D(x + 5 * u, y + 6 * u, x + 7 * u, y + 2 * u, x + 15 * u DIV 2, y + 5 * u DIV 2, gold);
+      OllGL6.Triunghi2D(x + 5 * u, y + 6 * u, x + 15 * u DIV 2, y + 5 * u DIV 2, x + 11 * u DIV 2, y + 25 * u DIV 4, gold)
+    ELSIF kind = 22 THEN   (* the recorder: a microphone on its stand *)
+      OllGL6.Rotund2D(x + 3 * u, y + u, 2 * u, 7 * u DIV 2, u, text);
+      OllGL6.Dreptunghi2D(x + 4 * u - 1, y + 9 * u DIV 2, 3, 3 * u DIV 2, text);
+      OllGL6.Rotund2D(x + 5 * u DIV 2, y + 6 * u, 3 * u, u DIV 2 + 2, u DIV 4, text);
+      OllGL6.Cerc2D(x + 4 * u, y + 2 * u, u DIV 2, OllGL6.RGB(240, 60, 70))
+    ELSIF kind = 24 THEN   (* the hunt: the boar, its tusks, and a tree *)
+      OllGL6.Triunghi2D(x + 6 * u, y + u, x + 5 * u, y + 3 * u, x + 7 * u, y + 3 * u, OllGL6.RGB(20, 60, 30));
+      OllGL6.Dreptunghi2D(x + 6 * u - 1, y + 3 * u, 3, u, OllGL6.RGB(90, 60, 30));
+      OllGL6.Rotund2D(x + u, y + 4 * u, 5 * u, 5 * u DIV 2, 5 * u DIV 4, OllGL6.RGB(110, 70, 40));
+      OllGL6.Cerc2D(x + 5 * u DIV 2, y + 4 * u, u, OllGL6.RGB(110, 70, 40));
+      OllGL6.Rotund2D(x + u DIV 2, y + 4 * u, 3 * u DIV 2, u + 2, u DIV 2, OllGL6.RGB(140, 95, 60));   (* the snout *)
+      OllGL6.Triunghi2D(x + u, y + 5 * u + 2, x + 3 * u DIV 2, y + 5 * u + 2, x + u, y + 4 * u - 1, text);   (* the tusk *)
+      OllGL6.Cerc2D(x + 5 * u DIV 2, y + 7 * u DIV 2, 2, text);
+      OllGL6.Dreptunghi2D(x + 2 * u, y + 13 * u DIV 2, u DIV 2 + 1, u, OllGL6.RGB(70, 45, 30)); OllGL6.Dreptunghi2D(x + 4 * u, y + 13 * u DIV 2, u DIV 2 + 1, u, OllGL6.RGB(70, 45, 30))
+    ELSIF kind = 23 THEN   (* the web: a globe with its meridians *)
+      OllGL6.Cerc2D(x + 4 * u, y + 4 * u, 3 * u, cyan); OllGL6.Cerc2D(x + 4 * u, y + 4 * u, 3 * u - 3, c);
+      OllGL6.Inel2D(x + 4 * u, y + 4 * u, 3 * u, 2, cyan);
+      OllGL6.Dreptunghi2D(x + u, y + 4 * u - 1, 6 * u, 3, cyan);
+      OllGL6.Dreptunghi2D(x + 4 * u - 1, y + u, 3, 6 * u, cyan);
+      OllGL6.Dreptunghi2D(x + 3 * u DIV 2, y + 5 * u DIV 2, 5 * u, 2, cyan); OllGL6.Dreptunghi2D(x + 3 * u DIV 2, y + 11 * u DIV 2, 5 * u, 2, cyan);
+      OllGL6.Inel2D(x + 4 * u, y + 4 * u, 3 * u DIV 2, 2, cyan)
+    ELSIF kind = 19 THEN   (* books: an open book *)
+      OllGL6.Triunghi2D(x + u, y + 2 * u, x + 4 * u, y + 5 * u DIV 2, x + 4 * u, y + 13 * u DIV 2, text);
+      OllGL6.Triunghi2D(x + u, y + 2 * u, x + 4 * u, y + 13 * u DIV 2, x + u, y + 6 * u, text);
+      OllGL6.Triunghi2D(x + 4 * u, y + 5 * u DIV 2, x + 7 * u, y + 2 * u, x + 7 * u, y + 6 * u, text);
+      OllGL6.Triunghi2D(x + 4 * u, y + 5 * u DIV 2, x + 7 * u, y + 6 * u, x + 4 * u, y + 13 * u DIV 2, text);
+      FOR k := 0 TO 2 DO
+        OllGL6.Dreptunghi2D(x + 3 * u DIV 2, y + 3 * u + k * u, 2 * u, 2, muted); OllGL6.Dreptunghi2D(x + 9 * u DIV 2, y + 3 * u + k * u, 2 * u, 2, muted)
+      END;
+      OllGL6.Dreptunghi2D(x + 4 * u - 1, y + 5 * u DIV 2, 2, 4 * u, gold)
     ELSE   (* text: lines on a page *)
       OllGL6.Rotund2D(x + 2 * u, y + 3 * u DIV 2, 4 * u, 5 * u, u DIV 2, text);
       FOR k := 0 TO 3 DO OllGL6.Dreptunghi2D(x + 5 * u DIV 2, y + 5 * u DIV 2 + k * u, 3 * u, 2, muted) END
@@ -258,7 +365,15 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   PROCEDURE KindOf*(VAR nm: ARRAY OF CHAR): INTEGER;   (* the icon of a file by its ending *)
     VAR k: INTEGER;
   BEGIN
-    IF Ends(nm, ".mod") THEN k := 7 ELSIF Ends(nm, ".z7") THEN k := 8 ELSIF Ends(nm, ".z7c") THEN k := 11 ELSE k := 12 END
+    IF Ends(nm, ".mod") THEN k := 7 ELSIF Ends(nm, ".z7") THEN k := 8 ELSIF Ends(nm, ".z7c") THEN k := 11
+    ELSIF Ends(nm, ".bmp") OR Ends(nm, ".ppm") OR Ends(nm, ".pgm") THEN k := 16
+    ELSIF Ends(nm, ".mp3") OR Ends(nm, ".ogg") OR Ends(nm, ".wav") OR Ends(nm, ".m4a") OR Ends(nm, ".flac") OR Ends(nm, ".aac")
+      OR Ends(nm, ".opus") OR Ends(nm, ".mid") OR Ends(nm, ".amr") THEN k := 18
+    ELSIF Ends(nm, ".pdf") THEN k := 19
+    ELSIF Ends(nm, ".mp4") OR Ends(nm, ".mkv") OR Ends(nm, ".webm") OR Ends(nm, ".3gp") OR Ends(nm, ".avi") OR Ends(nm, ".mov")
+      OR Ends(nm, ".m4v") THEN k := 20
+    ELSIF Ends(nm, ".txt") THEN k := 21
+    ELSE k := 12 END
     RETURN k
   END KindOf;
 
@@ -283,7 +398,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
 
   PROCEDURE DockAct(k: INTEGER): INTEGER;
     VAR r: INTEGER;
-  BEGIN IF k = 3 THEN r := 6 ELSIF k = 4 THEN r := 4 ELSE r := k + 1 END
+  BEGIN IF k = 3 THEN r := 6 ELSIF k = 4 THEN r := 4 ELSIF k = 1 THEN r := 21 ELSE r := k + 1 END
     RETURN r
   END DockAct;
 
@@ -294,7 +409,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   PROCEDURE Home*(isDown: BOOLEAN; x, y: INTEGER): INTEGER;   (* over the cube; the actions as above *)
     VAR s, t: ARRAY 40 OF CHAR; k, r, dy: INTEGER;
   BEGIN
-    Gazda3.Poll; INC(frames);
+    Gazda4.Poll; INC(frames);
     r := 0; dy := DockY();
     IF isDown & ~down THEN down := TRUE; moved := FALSE; x0 := x; y0 := y
     ELSIF isDown THEN IF (ABS(x - x0) > 14) OR (ABS(y - y0) > 14) THEN moved := TRUE END
@@ -307,19 +422,21 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     END;
     Status;
     s[0] := 0X; k := 0;   (* the clock *)
-    IF Gazda3.HasClock() THEN Two(Gazda3.Clock(3), s, k); s[k] := ":"; INC(k); Two(Gazda3.Clock(4), s, k) ELSE s := "CUBICUM" END;
+    IF Gazda4.HasClock() THEN Two(Gazda4.Clock(3), s, k); s[k] := ":"; INC(k); Two(Gazda4.Clock(4), s, k) ELSE s := "CUBICUM" END;
     Centre(W DIV 2, BAR + 34, s, 9, text);
-    IF Gazda3.HasClock() THEN
-      DayName(Gazda3.Clock(6), s); Add(s, " "); AddN(s, Gazda3.Clock(2)); Add(s, " "); MonthName(Gazda3.Clock(1), t); Add(s, t);
+    IF Gazda4.HasClock() THEN
+      DayName(Gazda4.Clock(6), s); Add(s, " "); AddN(s, Gazda4.Clock(2)); Add(s, " "); MonthName(Gazda4.Clock(1), t); Add(s, t);
       Centre(W DIV 2, BAR + 112, s, 2, muted)
     ELSE Centre(W DIV 2, BAR + 112, "NO CLOCK: BARE METAL", 2, muted)
     END;
     (* the dock *)
     OllGL6.Rotund2D(14, dy - 18, W - 28, 136, 28, surface);
     FOR k := 0 TO 4 DO
-      IF k = 3 THEN Glyph(9, DockX(k), dy, 72) ELSIF k = 4 THEN Glyph(3, DockX(k), dy, 72) ELSE Glyph(k, DockX(k), dy, 72) END;
-      IF k = 0 THEN s := "SYNTH" ELSIF k = 1 THEN s := "PLAYER" ELSIF k = 2 THEN s := "SHELL" ELSIF k = 3 THEN s := "FILES" ELSE s := "APPS" END;
-      Centre(DockX(k) + 36, dy + 84, s, 2, text)
+      IF k = 3 THEN Glyph(9, DockX(k), dy, 72) ELSIF k = 4 THEN Glyph(3, DockX(k), dy, 72) ELSIF k = 1 THEN Glyph(23, DockX(k), dy, 72) ELSE Glyph(k, DockX(k), dy, 72) END;
+      IF k = 0 THEN s := "ARIEL" ELSIF k = 1 THEN s := "NORA" ELSIF k = 2 THEN s := "OBERON" ELSIF k = 3 THEN s := "COBWEB" ELSE s := "COURT" END;
+      Centre(DockX(k) + 36, dy + 82, s, 2, text);
+      IF k = 0 THEN s := "SYNTH" ELSIF k = 1 THEN s := "WEB" ELSIF k = 2 THEN s := "SHELL" ELSIF k = 3 THEN s := "FILES" ELSE s := "APPS" END;
+      Centre(DockX(k) + 36, dy + 102, s, 1, muted)
     END;
     IF down & ~moved & (y0 >= dy - 10) & (y0 < dy + 110) THEN   (* the finger on an icon: it lights up *)
       FOR k := 0 TO 4 DO IF (x0 >= DockX(k) - 12) & (x0 < DockX(k) + 84) THEN OllGL6.Inel2D(DockX(k) + 36, dy + 36, 46, 3, gold) END END
@@ -343,15 +460,15 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   BEGIN
     nIt := 0;
     IF tab = 0 THEN
-      Item(kHead, 0); FOR i := 0 TO 5 DO Item(kOwn, i) END;
+      Item(kHead, 0); FOR i := 0 TO 17 DO Item(kOwn, i) END;
       Item(kHead, 1); Item(kTool, 0); Item(kTool, 1);
       Item(kHead, 2);
       FOR i := 0 TO Fs2.Count() - 1 DO
         Fs2.Name(i, nm); IF Ends(nm, ".mod") OR Ends(nm, ".z7") THEN Item(kProg, i) END
       END
     ELSE
-      FOR i := 0 TO Gazda3.Count() - 1 DO
-        IF Gazda3.Mine(i) = (tab = 1) THEN Item(kHost, i) END
+      FOR i := 0 TO Gazda4.Count() - 1 DO
+        IF Gazda4.Mine(i) = (tab = 1) THEN Item(kHost, i) END
       END
     END
   END Build;
@@ -373,24 +490,41 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     sMax := y - top
   END Layout;
 
+  PROCEDURE FairyName*(v: INTEGER; VAR s: ARRAY OF CHAR);   (* the fairy of own program v *)
+  BEGIN
+    IF v = 0 THEN Copy("ARIEL", s) ELSIF v = 1 THEN Copy("ECHO", s) ELSIF v = 2 THEN Copy("OBERON", s)
+    ELSIF v = 3 THEN Copy("MAB", s) ELSIF v = 4 THEN Copy("COBWEB", s) ELSIF v = 5 THEN Copy("TITANIA", s)
+    ELSIF v = 6 THEN Copy("PUCK", s) ELSIF v = 7 THEN Copy("MUSTARDSEED", s) ELSIF v = 8 THEN Copy("MOTH", s)
+    ELSIF v = 9 THEN Copy("IRIS", s) ELSIF v = 11 THEN Copy("PHILOMEL", s) ELSIF v = 12 THEN Copy("PEASEBLOSSOM", s) ELSIF v = 13 THEN Copy("JUNO", s) ELSIF v = 14 THEN Copy("QUINCE", s) ELSIF v = 15 THEN Copy("CERES", s)
+    ELSIF v = 16 THEN Copy("NORA", s) ELSIF v = 17 THEN Copy("HERNE", s) ELSE Copy("ROBIN", s) END
+  END FairyName;
+
+  PROCEDURE Job*(v: INTEGER; VAR s: ARRAY OF CHAR);   (* what fairy v does *)
+  BEGIN
+    IF v = 0 THEN Copy("SYNTH", s) ELSIF v = 1 THEN Copy("PLAYER", s) ELSIF v = 2 THEN Copy("SHELL", s)
+    ELSIF v = 3 THEN Copy("CANVAS", s) ELSIF v = 4 THEN Copy("FILES", s) ELSIF v = 5 THEN Copy("SETTINGS", s)
+    ELSIF v = 6 THEN Copy("TASKS", s) ELSIF v = 7 THEN Copy("CALC", s) ELSIF v = 8 THEN Copy("CLOCK", s)
+    ELSIF v = 9 THEN Copy("IMAGES", s) ELSIF v = 11 THEN Copy("MUSIC", s) ELSIF v = 12 THEN Copy("BOOKS", s) ELSIF v = 13 THEN Copy("VIDEO", s) ELSIF v = 14 THEN Copy("NOTES", s) ELSIF v = 15 THEN Copy("RECORDER", s)
+    ELSIF v = 16 THEN Copy("WEB", s) ELSIF v = 17 THEN Copy("HUNT", s) ELSE Copy("HELP", s) END
+  END Job;
+
   PROCEDURE Name(i: INTEGER; VAR s: ARRAY OF CHAR);   (* the label under item i *)
     VAR k, v: INTEGER;
   BEGIN
     k := itK[i]; v := itV[i];
     IF k = kOwn THEN
-      IF v = 0 THEN Copy("SYNTH", s) ELSIF v = 1 THEN Copy("PLAYER", s) ELSIF v = 2 THEN Copy("SHELL", s)
-      ELSIF v = 3 THEN Copy("CANVAS", s) ELSIF v = 4 THEN Copy("FILES", s) ELSE Copy("SETTINGS", s) END
+      FairyName(v, s)
     ELSIF k = kTool THEN IF v = 0 THEN Copy("INSTALL", s) ELSE Copy("BYZ7", s) END
     ELSIF k = kProg THEN Fs2.Name(v, s); k := Len(s); WHILE (k > 0) & (s[k] # ".") DO DEC(k) END; IF k > 0 THEN s[k] := 0X END
-    ELSIF k = kHost THEN Gazda3.Label(v, s)
+    ELSIF k = kHost THEN Gazda4.Label(v, s)
     ELSE s[0] := 0X
     END;
-    Fit(s, 9)
+    IF k = kOwn THEN Fit(s, 12) ELSE Fit(s, 9) END
   END Name;
 
   PROCEDURE OwnGlyph(v: INTEGER): INTEGER;
     VAR g: INTEGER;
-  BEGIN IF v = 3 THEN g := 4 ELSIF v = 4 THEN g := 9 ELSIF v = 5 THEN g := 10 ELSE g := v END
+  BEGIN IF v = 3 THEN g := 4 ELSIF v = 4 THEN g := 9 ELSIF v = 5 THEN g := 10 ELSIF v >= 6 THEN g := v + 7 ELSE g := v END
     RETURN g
   END OwnGlyph;
 
@@ -407,10 +541,10 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     r := 0; cw := (W - 32) DIV 4;
     IF (ty >= 110) & (ty < 162) THEN   (* the tabs *)
       j := (tx - 16) * 3 DIV (W - 32); IF j < 0 THEN j := 0 ELSIF j > 2 THEN j := 2 END;
-      tab := j; IF (tab > 0) & ~Gazda3.Loaded() & ~Gazda3.Waiting() & Gazda3.Hosted() THEN Gazda3.Ask END; Build
+      tab := j; IF (tab > 0) & ~Gazda4.Loaded() & ~Gazda4.Waiting() & Gazda4.Hosted() THEN Gazda4.Ask END; Build
     ELSIF ty >= H - 76 THEN   (* the bottom bar *)
       IF tx < W DIV 3 THEN
-        IF Gazda3.Hosted() THEN Gazda3.Ask; Say("ASKING THE HOST FOR ITS APPS") ELSE Say("NO HOST: BARE METAL") END
+        IF Gazda4.Hosted() THEN Gazda4.Ask; Say("ASKING THE HOST FOR ITS APPS") ELSE Say("NO HOST: BARE METAL") END
       ELSIF tx < 2 * W DIV 3 THEN r := -1
       END
     ELSIF ty >= 170 THEN
@@ -418,20 +552,21 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
       WHILE i < nIt DO
         IF (itK[i] # kHead) & (tx >= itX[i]) & (tx < itX[i] + cw) & (ty >= itY[i] + scroll[tab]) & (ty < itY[i] + scroll[tab] + 124) THEN
           IF itK[i] = kOwn THEN
-            IF itV[i] = 3 THEN r := 5 ELSIF itV[i] = 4 THEN r := 6 ELSIF itV[i] = 5 THEN r := 7 ELSE r := itV[i] + 1 END
+            IF itV[i] = 3 THEN r := 5 ELSIF itV[i] = 4 THEN r := 6 ELSIF itV[i] = 5 THEN r := 7
+            ELSIF itV[i] >= 6 THEN r := itV[i] + 5 ELSE r := itV[i] + 1 END
           ELSIF itK[i] = kTool THEN
-            IF itV[i] = 0 THEN j := Gazda3.FindAct("ro.jahbalon.crisalida", "Terminal"); IF j < 0 THEN j := Gazda3.FindAct("ro.jahbalon.oberon.crisalida", "Terminal") END
-            ELSE j := Gazda3.FindAct("ro.jahbalon.byz7", "Terminal") END;
-            IF ~Gazda3.Hosted() THEN Say("NEEDS A HOST UNDER CUBICUM N")
+            IF itV[i] = 0 THEN j := Gazda4.FindAct("ro.jahbalon.crisalida", "Terminal"); IF j < 0 THEN j := Gazda4.FindAct("ro.jahbalon.oberon.crisalida", "Terminal") END
+            ELSE j := Gazda4.FindAct("ro.jahbalon.byz7", "Terminal") END;
+            IF ~Gazda4.Hosted() THEN Say("NEEDS A HOST UNDER PIXIPOGO")
             ELSIF j < 0 THEN IF itV[i] = 0 THEN Say("CRISALIDA IS NOT ON THE PHONE") ELSE Say("BYZ7 IS NOT ON THE PHONE") END
-            ELSIF Gazda3.Launch(j) THEN IF itV[i] = 0 THEN Say("OPENING CRISALIDA") ELSE Say("OPENING BYZ7") END
+            ELSIF Gazda4.Launch(j) THEN IF itV[i] = 0 THEN Say("OPENING CRISALIDA") ELSE Say("OPENING BYZ7") END
             END
           ELSIF itK[i] = kProg THEN
             Fs2.Name(itV[i], nm); j := Len(nm); WHILE (j > 0) & (nm[j] # ".") DO DEC(j) END; IF j > 0 THEN nm[j] := 0X END;
             Copy(nm, chosen); r := 10
           ELSIF itK[i] = kHost THEN
-            Gazda3.Label(itV[i], nm); Fit(nm, 20);
-            IF Gazda3.Launch(itV[i]) THEN msg := "OPENING "; Add(msg, nm); tMsg := 90 END
+            Gazda4.Label(itV[i], nm); Fit(nm, 20);
+            IF Gazda4.Launch(itV[i]) THEN msg := "OPENING "; Add(msg, nm); tMsg := 90 END
           END;
           i := nIt
         END;
@@ -445,8 +580,8 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     (* the whole APPS screen; the actions as above *)
     VAR r, i, j, cw, yy, lim: INTEGER; s: ARRAY 40 OF CHAR; wasLoaded: BOOLEAN;
   BEGIN
-    wasLoaded := Gazda3.Loaded(); Gazda3.Poll; IF Gazda3.Loaded() & ~wasLoaded THEN Build END;
-    IF ~asked & Gazda3.Hosted() THEN asked := TRUE; IF ~Gazda3.Loaded() & ~Gazda3.Waiting() THEN Gazda3.Ask END END;
+    wasLoaded := Gazda4.Loaded(); Gazda4.Poll; IF Gazda4.Loaded() & ~wasLoaded THEN Build END;
+    IF ~asked & Gazda4.Hosted() THEN asked := TRUE; IF ~Gazda4.Loaded() & ~Gazda4.Waiting() THEN Gazda4.Ask END END;
     r := 0; cw := (W - 32) DIV 4;
     Layout(178);
     lim := H - 90 - 178 - sMax; IF lim > 0 THEN lim := 0 END;
@@ -462,7 +597,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
       yy := itY[i] + scroll[tab];
       IF (yy > 120) & (yy < H - 80) THEN
         IF itK[i] = kHead THEN
-          IF itV[i] = 0 THEN s := "CUBICUM N" ELSIF itV[i] = 1 THEN s := "TOOLS ON THE HOST" ELSE s := "PROGRAMS IN THE CUBE" END;
+          IF itV[i] = 0 THEN s := "THE FAIRIES OF OBERON" ELSIF itV[i] = 1 THEN s := "TOOLS ON THE HOST" ELSE s := "PROGRAMS IN THE CUBE" END;
           OllGL6.Text2D(itX[i], yy + 14, s, 2, gold); OllGL6.Dreptunghi2D(itX[i], yy + 34, W - 48, 1, edge)
         ELSE
           IF down & ~moved & (x0 >= itX[i]) & (x0 < itX[i] + cw) & (y0 >= yy) & (y0 < yy + 124) THEN
@@ -473,32 +608,33 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
           ELSIF itK[i] = kProg THEN Fs2.Name(itV[i], s); IF Ends(s, ".z7") THEN Glyph(8, itX[i] + (cw - 64) DIV 2, yy + 10, 64) ELSE Glyph(7, itX[i] + (cw - 64) DIV 2, yy + 10, 64) END
           ELSE HostIcon(itV[i], itX[i] + (cw - 64) DIV 2, yy + 10, 64)
           END;
-          Name(i, s); Centre(itX[i] + cw DIV 2, yy + 88, s, 2, text)
+          Name(i, s); Centre(itX[i] + cw DIV 2, yy + 84, s, 2, text);
+          IF itK[i] = kOwn THEN Job(itV[i], s); Centre(itX[i] + cw DIV 2, yy + 106, s, 1, muted) END
         END
       END
     END;
     IF (tab > 0) & (nIt = 0) THEN
-      IF Gazda3.Bare() THEN Centre(W DIV 2, 260, "NO HOST UNDER CUBICUM N", 2, muted); Centre(W DIV 2, 290, "BARE METAL: ONLY ITS OWN APPS", 2, muted)
-      ELSIF Gazda3.Waiting() OR ~Gazda3.Hosted() THEN Centre(W DIV 2, 260, "ASKING THE HOST ...", 2, muted)
-      ELSIF Gazda3.Loaded() THEN Centre(W DIV 2, 260, "NOTHING HERE", 2, muted)
+      IF Gazda4.Bare() THEN Centre(W DIV 2, 260, "NO HOST UNDER PIXIPOGO", 2, muted); Centre(W DIV 2, 290, "BARE METAL: ONLY ITS OWN APPS", 2, muted)
+      ELSIF Gazda4.Waiting() OR ~Gazda4.Hosted() THEN Centre(W DIV 2, 260, "ASKING THE HOST ...", 2, muted)
+      ELSIF Gazda4.Loaded() THEN Centre(W DIV 2, 260, "NOTHING HERE", 2, muted)
       ELSE Centre(W DIV 2, 260, "THIS WINDOW CANNOT LIST APPS", 2, muted); Centre(W DIV 2, 290, "NEEDS ECRAN-GL4.DEX", 2, muted)
       END
     END;
     (* the header, over the grid *)
     OllGL6.Dreptunghi2D(0, 0, W, 170, bg);
     Status;
-    OllGL6.Text2D(24, BAR + 26, "APPS", 4, text);
+    OllGL6.Text2D(24, BAR + 26, "THE COURT", 4, text);
     j := 0; FOR i := 0 TO nIt - 1 DO IF itK[i] # kHead THEN INC(j) END END;
     s[0] := 0X; AddN(s, j); IF tab = 0 THEN Add(s, " HERE") ELSE Add(s, " ON THE HOST") END;
     Right(W - 24, BAR + 36, s, 2, muted);
     OllGL6.Rotund2D(16, 112, W - 32, 48, 24, surface);
-    Tab(0, 20, (W - 40) DIV 3, "CUBICUM N"); Tab(1, 20 + (W - 40) DIV 3, (W - 40) DIV 3, "JAHBALON");
+    Tab(0, 20, (W - 40) DIV 3, "PIXIPOGO"); Tab(1, 20 + (W - 40) DIV 3, (W - 40) DIV 3, "JAHBALON");
     Tab(2, 20 + 2 * ((W - 40) DIV 3), (W - 40) DIV 3, "ANDROID");
     (* the bottom bar *)
     OllGL6.Dreptunghi2D(0, H - 80, W, 160, dark);   (* down past H too: the names of the last row do not show under it *)
     Centre(W DIV 6, H - 46, "REFRESH", 2, muted);
     OllGL6.Rotund2D(W DIV 2 - 70, H - 62, 140, 44, 22, surface2); Centre(W DIV 2, H - 46, "HOME", 2, text);
-    IF Gazda3.Waiting() THEN Centre(5 * W DIV 6, H - 46, "...", 2, gold) END;
+    IF Gazda4.Waiting() THEN Centre(5 * W DIV 6, H - 46, "...", 2, gold) END;
     IF tMsg > 0 THEN DEC(tMsg); OllGL6.Rotund2D(40, H - 136, W - 80, 44, 22, surface2); Centre(W DIV 2, H - 120, msg, 2, gold) END;
     OllGL6.Arata
     RETURN r
@@ -521,8 +657,8 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
   PROCEDURE Settings*(isDown: BOOLEAN; x, y: INTEGER): INTEGER;
     VAR r, k, yy, n: INTEGER; s: ARRAY 40 OF CHAR;
   BEGIN
-    Gazda3.Poll; r := 0; yy := sTop;
-    IF ~asked & Gazda3.Hosted() THEN asked := TRUE; IF ~Gazda3.Loaded() & ~Gazda3.Waiting() THEN Gazda3.Ask END END;
+    Gazda4.Poll; r := 0; yy := sTop;
+    IF ~asked & Gazda4.Hosted() THEN asked := TRUE; IF ~Gazda4.Loaded() & ~Gazda4.Waiting() THEN Gazda4.Ask END END;
     IF isDown & ~down THEN down := TRUE; moved := FALSE; x0 := x; y0 := y
     ELSIF isDown THEN IF (ABS(x - x0) > 14) OR (ABS(y - y0) > 14) THEN moved := TRUE END
     ELSIF down THEN
@@ -540,7 +676,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     END;
     OllGL6.Incepe(bg);
     Status;
-    OllGL6.Text2D(24, BAR + 26, "SETTINGS", 4, text);
+    OllGL6.Text2D(24, BAR + 26, "TITANIA", 4, text); Right(W - 24, BAR + 36, "SETTINGS", 2, muted);
     OllGL6.Text2D(24, yy + 10, "ACCENT", 2, gold);
     FOR k := 0 TO 4 DO
       n := 24 + k * (W - 48) DIV 5 + (W - 48) DIV 10;
@@ -551,11 +687,11 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     Switch(yy + 150, "BOOT SCREEN", boot); Switch(yy + 200, "THE CUBE TURNS ALONE", spin); Switch(yy + 250, "SHOW FPS", fps);
     OllGL6.Rotund2D(24, yy + 314, W - 48, 50, 25, surface2); Centre(W DIV 2, yy + 332, "SEE THE BOOT AGAIN", 2, text);
     OllGL6.Text2D(24, yy + 398, "ABOUT", 2, gold); OllGL6.Dreptunghi2D(24, yy + 418, W - 48, 1, edge);
-    Row(yy + 434, "SYSTEM", "CUBICUM N 17");
-    Row(yy + 464, "PARTS", "DESK 4 . GAZDA 3 . SHELL 12");
-    Gazda3.System(s); Row(yy + 494, "HOST", s);
-    Gazda3.Model(s); IF s[0] = 0X THEN Copy("-", s) END; Fit(s, 24); Row(yy + 524, "DEVICE", s);
-    s[0] := 0X; AddN(s, Gazda3.Count()); Row(yy + 554, "HOST APPS", s);
+    Row(yy + 434, "SYSTEM", "PIXIPOGO 50");
+    Row(yy + 464, "PARTS", "DESK 6U . NORA 18 . HERNE 1 . GL 7");
+    Gazda4.System(s); Row(yy + 494, "HOST", s);
+    Gazda4.Model(s); IF s[0] = 0X THEN Copy("-", s) END; Fit(s, 24); Row(yy + 524, "DEVICE", s);
+    s[0] := 0X; AddN(s, Gazda4.Count()); Row(yy + 554, "HOST APPS", s);
     s[0] := 0X; AddN(s, Fs2.Count()); Row(yy + 584, "FILES IN THE CUBE", s);
     Row(yy + 614, "CUBE", "7 X 7 X 7 . 343 CELLS");
     Row(yy + 644, "LANGUAGE", "OBERON . OLL . BYZ7");
@@ -565,6 +701,32 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
     OllGL6.Arata
     RETURN r
   END Settings;
+
+  (* ---------- for the tools: the same top and bottom on every screen ---------- *)
+
+  PROCEDURE Header*(t, r: ARRAY OF CHAR);   (* status bar, a big title, a note on the right *)
+  BEGIN
+    OllGL6.Dreptunghi2D(0, 0, W, BAR + 60, bg); Status;
+    OllGL6.Text2D(24, BAR + 14, t, 4, text); Right(W - 24, BAR + 24, r, 2, muted)
+  END Header;
+
+  PROCEDURE Bottom*;   (* the bar with HOME; a tap there gives -1 (see IsHome) *)
+  BEGIN
+    OllGL6.Dreptunghi2D(0, H - 80, W, 160, dark);
+    OllGL6.Rotund2D(W DIV 2 - 70, H - 62, 140, 44, 22, surface2); Centre(W DIV 2, H - 46, "HOME", 2, text)
+  END Bottom;
+
+  PROCEDURE IsHome*(y: INTEGER): BOOLEAN;
+  BEGIN RETURN y >= H - 76
+  END IsHome;
+
+  PROCEDURE Toast*(y: INTEGER);   (* the last message of Say, for a moment *)
+  BEGIN
+    IF tMsg > 0 THEN DEC(tMsg); OllGL6.Rotund2D(40, y, W - 80, 44, 22, surface2); Centre(W DIV 2, y + 16, msg, 2, gold) END
+  END Toast;
+
+  PROCEDURE Width*(): INTEGER; BEGIN RETURN W END Width;
+  PROCEDURE Height*(): INTEGER; BEGIN RETURN H END Height;
 
   PROCEDURE Chosen*(VAR s: ARRAY OF CHAR);   (* the program the drawer chose (its name without .mod) *)
   BEGIN Copy(chosen, s)
@@ -576,7 +738,7 @@ MODULE Desk4;  (* DESK 4 (19 Nov 2026, Cubicum N 17): with 121 apps on the host 
 
   PROCEDURE Start*(w, h: INTEGER);
   BEGIN
-    W := w; H := h; sTop := BAR + 90; Load; Gazda3.Poll; Build
+    W := w; H := h; sTop := BAR + 90; Load; Gazda4.Poll; Build
   END Start;
 
 BEGIN
@@ -586,4 +748,4 @@ BEGIN
   text := OllGL6.RGB(240, 235, 250); muted := OllGL6.RGB(150, 140, 175); gold := OllGL6.RGB(212, 160, 23);
   cyan := OllGL6.RGB(125, 211, 252); green := OllGL6.RGB(74, 222, 128); red := OllGL6.RGB(239, 68, 68);
   violet := OllGL6.RGB(124, 58, 237); dark := OllGL6.RGB(8, 2, 16)
-END Desk4.
+END Desk6.

@@ -1,4 +1,6 @@
-MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
+MODULE Shell13;  (* SHELL 13b (20 Nov 2026, Cubicum N 27): it says PIXIPOGO.
+  SHELL 13 (20 Nov 2026, Cubicum N 18): Shell 12 with Gazda4.
+   SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
    SHELL 11 (19 Nov 2026, Cubicum N 16): Shell 10 with Gazda2 (the host with 32 x 32 icons).
    SHELL 10 (19 Nov 2026, Cubicum N 14): Shell 9 plus the host: APPS lists the apps of the system under
      Cubicum N, OPEN NAME starts one (Gazda1); Do runs a command for the APPS drawer (a program tapped there).
@@ -40,7 +42,7 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
                NOTE X Y Z [MS], FREQ X Y Z, STATUS, TIME, ECHO ..., CLEAR, VER
      Pion & Claude, 11.11.2026 *)
 
-  IMPORT Ecran, Ceas, Grafica, Fisier, Synth9, Text1, Keys1, Fs2, Edit4, Tor11, Sal4, Clip2, Arch1, Gazda3;
+  IMPORT Ecran, Ceas, Grafica, Fisier, Synth9, Text1, Keys1, Fs2, Edit4, Tor11, Sal4, Clip2, Arch1, Gazda4;
 
   CONST
     RANDURI = 20;                    (* the bottom rows of the screen carry the sound *)
@@ -682,12 +684,12 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
   PROCEDURE HostApps;   (* the apps of the system under Cubicum N *)
     VAR i: INTEGER; nm: ARRAY 44 OF CHAR;
   BEGIN
-    IF ~Gazda3.Hosted() THEN Say("NO HOST UNDER CUBICUM N: BARE METAL", grey)
-    ELSIF ~Gazda3.Loaded() THEN Gazda3.Ask; Say("ASKING THE HOST. TYPE APPS AGAIN IN A MOMENT", grey)
+    IF ~Gazda4.Hosted() THEN Say("NO HOST UNDER PIXIPOGO: BARE METAL", grey)
+    ELSIF ~Gazda4.Loaded() THEN Gazda4.Ask; Say("ASKING THE HOST. TYPE APPS AGAIN IN A MOMENT", grey)
     ELSE
-      Gazda3.System(nm); Clr; Add(nm); Add(": "); AddN(Gazda3.Count()); Add(" APPS"); Put(gold);
-      FOR i := 0 TO Gazda3.Count() - 1 DO
-        Gazda3.Label(i, nm); Clr; Add("  "); Add(nm); IF Gazda3.Mine(i) THEN Put(violet) ELSE Put(white) END
+      Gazda4.System(nm); Clr; Add(nm); Add(": "); AddN(Gazda4.Count()); Add(" APPS"); Put(gold);
+      FOR i := 0 TO Gazda4.Count() - 1 DO
+        Gazda4.Label(i, nm); Clr; Add("  "); Add(nm); IF Gazda4.Mine(i) THEN Put(violet) ELSE Put(white) END
       END;
       Say("OPEN NAME STARTS ONE (THE FIRST LETTERS ARE ENOUGH)", grey)
     END
@@ -697,17 +699,17 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
     VAR i, j, r: INTEGER; nm: ARRAY 44 OF CHAR; ok: BOOLEAN;
   BEGIN
     IF nWords < 2 THEN Say("OPEN WHICH APP? LIKE: OPEN CRISALIDA (APPS LISTS THEM)", red)
-    ELSIF ~Gazda3.Hosted() THEN Say("NO HOST UNDER CUBICUM N: BARE METAL", red)
-    ELSIF ~Gazda3.Loaded() THEN Gazda3.Ask; Say("ASKING THE HOST. TRY AGAIN IN A MOMENT", grey)
+    ELSIF ~Gazda4.Hosted() THEN Say("NO HOST UNDER PIXIPOGO: BARE METAL", red)
+    ELSIF ~Gazda4.Loaded() THEN Gazda4.Ask; Say("ASKING THE HOST. TRY AGAIN IN A MOMENT", grey)
     ELSE
       r := -1; i := 0;
-      WHILE (r < 0) & (i < Gazda3.Count()) DO
-        Gazda3.Label(i, nm); ok := TRUE; j := 0;
+      WHILE (r < 0) & (i < Gazda4.Count()) DO
+        Gazda4.Label(i, nm); ok := TRUE; j := 0;
         WHILE ok & (words[1, j] # 0X) DO IF Lower(nm[j]) # words[1, j] THEN ok := FALSE END; INC(j) END;
         IF ok THEN r := i END; INC(i)
       END;
       IF r < 0 THEN Say("NO SUCH APP ON THE HOST (APPS LISTS THEM)", red)
-      ELSIF Gazda3.Launch(r) THEN Gazda3.Label(r, nm); Clr; Add("OPENING "); Add(nm); Put(green)
+      ELSIF Gazda4.Launch(r) THEN Gazda4.Label(r, nm); Clr; Add("OPENING "); Add(nm); Put(green)
       ELSE Say("THE HOST DID NOT TAKE IT", red)
       END
     END
@@ -853,7 +855,7 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
       WHILE n < nInp DO t[tn] := inp[n]; INC(tn); INC(n) END; t[tn] := 0X;
       Put(white)
     ELSIF Is(0, "clear") OR Is(0, "cls") THEN nLines := 0; scroll := 0
-    ELSIF Is(0, "ver") OR Is(0, "version") THEN Say("CUBICUM N 17 . SHELL 12 . DESK 4 . GAZDA 3 . ARCH 1", gold)
+    ELSIF Is(0, "ver") OR Is(0, "version") THEN Say("PIXIPOGO . CUBICUM N 27 . SHELL 13 . DESK 6 . ZANE 4", gold)
     ELSE Clr; Add("UNKNOWN: "); Add(words[0]); Add(". TRY HELP"); Put(red)
     END;
     nInp := 0; inp[0] := 0X
@@ -892,7 +894,7 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
     IF ~Fs2.Exists("catch.mod") THEN ExamplesGame END;
     IF ~started THEN
       started := TRUE;
-      Say("CUBICUM N SHELL 12 . OBERON ON TOR7", gold);
+      Say("PIXIPOGO SHELL 13 . OBERON ON TOR7", gold);
       Say("HOLD THE COMMAND LINE TO PASTE", grey);
       Say("TYPE HELP AND PRESS ENTER. TRY: RUN CATCH", grey)
     END
@@ -1030,4 +1032,4 @@ MODULE Shell12;  (* SHELL 12 (19 Nov 2026, Cubicum N 17): Shell 11 with Gazda3.
 BEGIN
   started := FALSE; editing := FALSE; holding := FALSE; menu := FALSE; pasting := FALSE; moved := FALSE; startY := 0; rmName[0] := 0X; fname[0] := 0X; nLines := 0; scroll := 0; nInp := 0; inp[0] := 0X; down := FALSE; wasDown := FALSE;
   W := 1; H := 1; kbTop := 1; inY := 1; outTop := 1; outBot := 1; vis := 1; result := 0
-END Shell12.
+END Shell13.

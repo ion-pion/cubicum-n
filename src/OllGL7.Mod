@@ -1,25 +1,41 @@
-MODULE OllGL6;  (* GL 6 (19 nov 2026, Cubicum N 17): ca OllGL5, cu 40000 de triunghiuri 2D (121 de iconite pe telefonul lui Pion
-     mancau tot cadrul si nu mai incapea titlul).
-   GL 5 (19 nov 2026): ca OllGL4, cu 20000 de triunghiuri 2D intr-un cadru (nu 6000: iconitele si
-     literele desktopului lui Cubicum N 14) si Rotund2D, dreptunghiul cu colturi rotunde. Aceeasi fereastra.
-   GL 4 (10 nov 2026): ca OllGL3, plus Rezerva(randuri): ultimele randuri ale ecranului raman neatinse
-     (acolo sta sunetul curgator al ferestrei ecran-gl3-sunet2.dex). Fereastra e aceeasi ca la GL 3.
-   GL 3 (5 nov 2026): ca OllGL2, plus LuminaPunct: o lumina in lume (un bec), care lumineaza peretii
-     si obiectele din jurul ei; trebuie fereastra ecran-gl3.dex (cu gl1/gl2 lumina nu se vede, restul merge).
-   GL 2: placa grafica a telefonului, din Oberon (OLL, Byz7 4).
-     Fata de OllGL (GL 1): Text2D, Numar2D, Cerc2D, Inel2D, Linie2D (scrisul si desenele de deasupra, cu literele
-     5 x 7 ale Graficii) si Disc (un cerc plin in lume, mereu cu fata spre camera).
-     La fiecare cadru:
-       OllGL4.Incepe(fond);  OllGL4.Camera(ochi x y z, tinta x y z, unghi);  [Ceata(de, pana)]  [Lumina(f)]
-       Triunghi / Patrat / Cub / Disc                       (* in lume: y in sus *)
-       Triunghi2D / Dreptunghi2D / Cerc2D / Inel2D / Linie2D / Text2D / Numar2D   (* peste, in pixeli *)
-       OllGL4.Arata
-     Culorile: RGB(r, g, b) (la fel ca Grafica.RGB). *)
+MODULE OllGL7;  (* GL 7 (24 nov 2026, Pixipogo 44): OllGL6 plus pictures on the graphics card (textures).
+     Pion: "la placa video" and "they will want fast games on mediocre hardware; so we will give them".
+     The pixels are given here from Oberon (Pic5 reads the pictures, a game makes its own), they go to the card once,
+     and then a picture costs as little as two triangles, every frame, at the real resolution of the screen (the
+     2D coordinates are the half pixels of the window, the card draws on all the pixels).
+       OllGL7.Texturi()                        does the window draw them? (window ecran-cubn44.dex or newer)
+       OllGL7.Textura(k, l, h, px)             slot k (0 .. 63) gets l x h pixels, px[y * l + x], colours as RGB / RGBA
+       OllGL7.IncepeTextura(k, l, h); OllGL7.PixelTextura(c) l * h times, row after row; OllGL7.GataTextura
+       OllGL7.Pixelat(TRUE)                    the next textures are drawn with sharp pixels (pixel art), not smoothed
+       OllGL7.StergeTextura(k)                 the card forgets slot k
+       Poza2D(x, y, l, h, k)                   the whole picture k in the rectangle
+       Bucata2D(x, y, l, h, k, sx, sy, sl, sh) a part of it (a sprite of a sheet), in the pixels of the texture
+       Sprite2D(x, y, l, h, unghi, k, c)       REAL: centred on (x, y), turned by unghi degrees, tinted by c
+                                               (RGB(255, 255, 255) as it is; RGBA(255, 255, 255, 128) half seen)
+     The pictures are drawn in the order of the calls, among the 2D triangles: what is drawn after covers them.
+     Everything of OllGL6 is here the same (and OllGL6t is OllGL6 made of OllGL7, so the old modules share the frame).
+     The window gets the pixels in the file gl-tex-k.raw of the app's folder; the frame says which generation
+     of each slot to show (frame of version 4: 3D, 2D, then the pictures, 12 numbers each, then the 64 generations).
 
-  IMPORT Ecran, Math;
+   GL 6 (19 nov 2026, Cubicum N 17): ca OllGL5, cu 40000 de triunghiuri 2D (121 de iconite pe telefonul lui Pion
+     mancau tot cadrul si nu mai incapea titlul).
+   GL 5 (19 nov 2026): ca OllGL4, cu 20000 de triunghiuri 2D intr-un cadru si Rotund2D.
+   GL 4 (10 nov 2026): Rezerva(randuri). GL 3 (5 nov 2026): LuminaPunct. GL 2: Text2D, Numar2D, Cerc2D, Inel2D,
+     Linie2D, Disc. La fiecare cadru:
+       Incepe(fond);  Camera(ochi x y z, tinta x y z, unghi);  [Ceata(de, pana)]  [Lumina(f)]
+       Triunghi / Patrat / Cub / Disc                       (* in lume: y in sus *)
+       Triunghi2D / Dreptunghi2D / ... / Poza2D / Sprite2D  (* peste, in pixeli *)
+       Arata
+   Pion & Claude, 24.11.2026 *)
+
+  IMPORT Ecran, Math, Fisier;
 
   CONST SEMN = 3361863;   (* 00334C47H: "GL3", cu alfa 0 (o culoare din RGB are alfa 255) *)
     M2 = 40000;           (* cate triunghiuri 2D intr-un cadru *)
+    M4 = 4000;            (* cate poze intr-un cadru *)
+    NT* = 64;             (* cate texturi (sloturi) *)
+    TEX1 = 1413830705;    (* "TEX1": fereastra le stie *)
+    MAXT* = 4096;         (* cel mai lung lat al unei texturi *)
 
   VAR w, h, cap, n3, n2, fond, rez: INTEGER;
     ox, oy, oz, tx, ty, tz, fov, cde, cpana, amb: REAL;
@@ -27,6 +43,9 @@ MODULE OllGL6;  (* GL 6 (19 nov 2026, Cubicum N 17): ca OllGL5, cu 40000 de triu
     rx, ry, rz, ux, uy, uz: REAL;   (* dreapta si susul camerei, pentru Disc *)
     t2: ARRAY 280000 OF INTEGER;
     sus, jos: ARRAY 128 OF INTEGER;
+    n4, gseq, tk, tn, tf, pixelat: INTEGER;   (* pozele; ultima generatie; textura care se scrie: slot, pixeli ramasi, fisier *)
+    t4: ARRAY M4 * 12 OF INTEGER;
+    tgen, tlat, tina: ARRAY NT OF INTEGER;
 
   PROCEDURE RGB*(r, g, b: INTEGER): INTEGER;
   BEGIN RETURN r MOD 256 + 256 * (g MOD 256) + 65536 * (b MOD 256) - 16777216
@@ -43,7 +62,7 @@ MODULE OllGL6;  (* GL 6 (19 nov 2026, Cubicum N 17): ca OllGL5, cu 40000 de triu
   PROCEDURE Incepe*(culoareFond: INTEGER);
   BEGIN
     w := Ecran.Latime(); h := Ecran.Inaltime(); IF w < 1 THEN w := 1 END; IF h < 1 THEN h := 1 END; cap := w * (h - rez); IF cap < 64 THEN cap := 64 END;
-    n3 := 0; n2 := 0; fond := culoareFond; lraza := 0.0
+    n3 := 0; n2 := 0; n4 := 0; fond := culoareFond; lraza := 0.0
   END Incepe;
 
   PROCEDURE Rezerva*(randuri: INTEGER);   (* cate randuri de la capatul ecranului nu se ating (sunetul) *)
@@ -240,18 +259,162 @@ MODULE OllGL6;  (* GL 6 (19 nov 2026, Cubicum N 17): ca OllGL5, cu 40000 de triu
   BEGIN RETURN M2 - n2
   END Liber2D;
 
-  PROCEDURE Arata*;
-    VAR b, k, n: INTEGER;
+
+  (* ---------- pozele: texturi pe placa grafica ---------- *)
+
+  PROCEDURE RGBA*(r, g, b, a: INTEGER): INTEGER;   (* a: 0 nevazut .. 255 plin *)
+    VAR v: INTEGER;
   BEGIN
-    n := n2; b := 64 + n3 * 10;
-    IF b + n * 7 > cap THEN n := (cap - b) DIV 7 END;
+    v := r MOD 256 + 256 * (g MOD 256) + 65536 * (b MOD 256); a := a MOD 256;
+    IF a >= 128 THEN v := v + (a - 256) * 16777216 ELSE v := v + a * 16777216 END
+    RETURN v
+  END RGBA;
+
+  PROCEDURE Texturi*(): BOOLEAN;   (* fereastra stie sa le deseneze? *)
+  BEGIN RETURN Ecran.Citeste(26) = TEX1
+  END Texturi;
+
+  PROCEDURE Pixelat*(da: BOOLEAN);   (* texturile urmatoare: pixeli ascutiti (pixel art) *)
+  BEGIN IF da THEN pixelat := 1 ELSE pixelat := 0 END
+  END Pixelat;
+
+  PROCEDURE Int(f, v: INTEGER);   (* 4 octeti, cel mic primul *)
+  BEGIN
+    IF v < 0 THEN
+      v := v + 2147483647 + 1;
+      Fisier.Scrie(f, v MOD 256); Fisier.Scrie(f, v DIV 256 MOD 256); Fisier.Scrie(f, v DIV 65536 MOD 256); Fisier.Scrie(f, v DIV 16777216 + 128)
+    ELSE
+      Fisier.Scrie(f, v MOD 256); Fisier.Scrie(f, v DIV 256 MOD 256); Fisier.Scrie(f, v DIV 65536 MOD 256); Fisier.Scrie(f, v DIV 16777216)
+    END
+  END Int;
+
+  PROCEDURE Nume(k: INTEGER; VAR s: ARRAY OF CHAR);   (* gl-tex-k.raw *)
+    VAR i: INTEGER;
+  BEGIN
+    s[0] := "g"; s[1] := "l"; s[2] := "-"; s[3] := "t"; s[4] := "e"; s[5] := "x"; s[6] := "-"; i := 7;
+    IF k >= 10 THEN s[i] := CHR(ORD("0") + k DIV 10); INC(i) END;
+    s[i] := CHR(ORD("0") + k MOD 10); INC(i);
+    s[i] := "."; s[i + 1] := "r"; s[i + 2] := "a"; s[i + 3] := "w"; s[i + 4] := 0X
+  END Nume;
+
+  PROCEDURE GataTextura*;   (* dupa ultimul pixel: placa o ia la cadrul urmator *)
+  BEGIN
+    IF tf >= 0 THEN
+      WHILE tn > 0 DO Int(tf, 0); DEC(tn) END;   (* ce lipseste: nevazut *)
+      Fisier.Gata(tf); tf := -1; tgen[tk] := gseq
+    END
+  END GataTextura;
+
+  PROCEDURE IncepeTextura*(k, l, h: INTEGER);   (* apoi PixelTextura de l * h ori, rand dupa rand, de sus *)
+    VAR s: ARRAY 24 OF CHAR;
+  BEGIN
+    IF tf >= 0 THEN GataTextura END;
+    IF (k >= 0) & (k < NT) & (l > 0) & (h > 0) & (l <= MAXT) & (h <= MAXT) THEN
+      Nume(k, s); tf := Fisier.Creeaza(s);
+      IF tf >= 0 THEN
+        INC(gseq); tk := k; tn := l * h; tlat[k] := l; tina[k] := h;
+        Fisier.Scrie(tf, ORD("G")); Fisier.Scrie(tf, ORD("L")); Fisier.Scrie(tf, ORD("T")); Fisier.Scrie(tf, ORD("1"));
+        Int(tf, l); Int(tf, h); Int(tf, gseq); Int(tf, pixelat)
+      END
+    END
+  END IncepeTextura;
+
+  PROCEDURE PixelTextura*(c: INTEGER);   (* culoarea ca RGB / RGBA; placa vrea culorile inmultite cu alfa *)
+    VAR r, g, b, a: INTEGER;
+  BEGIN
+    IF (tf >= 0) & (tn > 0) THEN
+      IF c < 0 THEN c := c + 2147483647 + 1; a := 128 ELSE a := 0 END;
+      a := a + c DIV 16777216; c := c MOD 16777216;
+      r := c MOD 256; g := c DIV 256 MOD 256; b := c DIV 65536;
+      IF a < 255 THEN r := (r * a + 127) DIV 255; g := (g * a + 127) DIV 255; b := (b * a + 127) DIV 255 END;
+      Fisier.Scrie(tf, r); Fisier.Scrie(tf, g); Fisier.Scrie(tf, b); Fisier.Scrie(tf, a);
+      DEC(tn)
+    END
+  END PixelTextura;
+
+  PROCEDURE Textura*(k, l, h: INTEGER; VAR px: ARRAY OF INTEGER);   (* px[y * l + x] *)
+    VAR i, n: INTEGER;
+  BEGIN
+    n := l * h; IF n > LEN(px) THEN n := LEN(px) END;
+    IncepeTextura(k, l, h);
+    IF tf >= 0 THEN FOR i := 0 TO n - 1 DO PixelTextura(px[i]) END END;
+    GataTextura
+  END Textura;
+
+  PROCEDURE StergeTextura*(k: INTEGER);
+    VAR s: ARRAY 24 OF CHAR;
+  BEGIN
+    IF (k >= 0) & (k < NT) THEN tgen[k] := 0; tlat[k] := 0; tina[k] := 0; Nume(k, s); Fisier.Sterge(s) END
+  END StergeTextura;
+
+  PROCEDURE LatTextura*(k: INTEGER): INTEGER;
+    VAR v: INTEGER;
+  BEGIN v := 0; IF (k >= 0) & (k < NT) THEN v := tlat[k] END
+    RETURN v
+  END LatTextura;
+
+  PROCEDURE InaltTextura*(k: INTEGER): INTEGER;
+    VAR v: INTEGER;
+  BEGIN v := 0; IF (k >= 0) & (k < NT) THEN v := tina[k] END
+    RETURN v
+  END InaltTextura;
+
+  PROCEDURE Poza(x16, y16, l16, h16, k, sx, sy, sl, sh, c, mgrade: INTEGER);   (* in saisprezecimi de pixel *)
+    VAR b: INTEGER;
+  BEGIN
+    IF (n4 < M4) & (k >= 0) & (k < NT) & (tgen[k] # 0) & (l16 > 0) & (h16 > 0) THEN
+      b := n4 * 12;
+      t4[b] := n2; t4[b + 1] := k; t4[b + 2] := x16; t4[b + 3] := y16; t4[b + 4] := l16; t4[b + 5] := h16;
+      t4[b + 6] := sx; t4[b + 7] := sy; t4[b + 8] := sl; t4[b + 9] := sh; t4[b + 10] := c; t4[b + 11] := mgrade;
+      INC(n4)
+    END
+  END Poza;
+
+  PROCEDURE Poza2D*(x, y, l, h, k: INTEGER);   (* toata textura k in dreptunghi *)
+  BEGIN Poza(x * 16, y * 16, l * 16, h * 16, k, 0, 0, 0, 0, -1, 0)
+  END Poza2D;
+
+  PROCEDURE Bucata2D*(x, y, l, h, k, sx, sy, sl, sh: INTEGER);   (* bucata (sx, sy, sl, sh) a texturii, in pixelii ei *)
+  BEGIN Poza(x * 16, y * 16, l * 16, h * 16, k, sx, sy, sl, sh, -1, 0)
+  END Bucata2D;
+
+  PROCEDURE Sprite2D*(x, y, l, h, unghi: REAL; k, c: INTEGER);   (* centrul in (x, y), intoarsa cu unghi grade, colorata cu c *)
+  BEGIN
+    Poza(FLOOR((x - l / 2.0) * 16.0 + 0.5), FLOOR((y - h / 2.0) * 16.0 + 0.5), FLOOR(l * 16.0 + 0.5), FLOOR(h * 16.0 + 0.5),
+      k, 0, 0, 0, 0, c, FLOOR(unghi * 1000.0 + 0.5))
+  END Sprite2D;
+
+  PROCEDURE BucataSprite2D*(x, y, l, h, unghi: REAL; k, sx, sy, sl, sh, c: INTEGER);   (* un sprite dintr-o foaie *)
+  BEGIN
+    Poza(FLOOR((x - l / 2.0) * 16.0 + 0.5), FLOOR((y - h / 2.0) * 16.0 + 0.5), FLOOR(l * 16.0 + 0.5), FLOOR(h * 16.0 + 0.5),
+      k, sx, sy, sl, sh, c, FLOOR(unghi * 1000.0 + 0.5))
+  END BucataSprite2D;
+
+  PROCEDURE LiberePoze*(): INTEGER;   (* cate poze mai incap in cadrul acesta *)
+  BEGIN RETURN M4 - n4
+  END LiberePoze;
+
+  PROCEDURE Arata*;
+    VAR b, k, n, m, rest: INTEGER;
+  BEGIN
+    b := 64 + n3 * 10; rest := cap - b - NT; IF rest < 0 THEN rest := 0 END;
+    n := n2; IF n * 7 > rest THEN n := rest DIV 7 END;
+    rest := rest - n * 7; m := n4; IF m * 12 > rest THEN m := rest DIV 12 END;
     FOR k := 0 TO n * 7 - 1 DO Pune(b + k, t2[k]) END;
-    Pune(0, SEMN); Pune(1, 3); Pune(2, n3); Pune(3, n);
+    b := b + n * 7;
+    IF b + m * 12 + NT <= cap THEN
+      FOR k := 0 TO m * 12 - 1 DO Pune(b + k, t4[k]) END;
+      b := b + m * 12;
+      FOR k := 0 TO NT - 1 DO Pune(b + k, tgen[k]) END
+    ELSE m := 0
+    END;
+    Pune(0, SEMN); Pune(1, 4); Pune(2, n3); Pune(3, n);
     Pune(4, fond); Pune(5, Mii(fov));
     Pune(6, Mii(ox)); Pune(7, Mii(oy)); Pune(8, Mii(oz));
     Pune(9, Mii(tx)); Pune(10, Mii(ty)); Pune(11, Mii(tz));
     Pune(12, Mii(cde)); Pune(13, Mii(cpana)); Pune(14, Mii(amb)); Pune(15, 0);
     Pune(16, Mii(lx)); Pune(17, Mii(ly)); Pune(18, Mii(lz)); Pune(19, Mii(lraza)); Pune(20, Mii(lputere)); Pune(21, lcul);
+    IF b + NT <= cap THEN Pune(22, m); Pune(23, NT) ELSE Pune(22, 0); Pune(23, 0) END;
     Ecran.Arata
   END Arata;
 
@@ -278,5 +441,7 @@ BEGIN
   ox := 0.0; oy := 0.0; oz := 10.0; tx := 0.0; ty := 0.0; tz := 0.0; fov := 60.0; cde := 0.0; cpana := 0.0; amb := 0.35;
   rx := 1.0; ry := 0.0; rz := 0.0; ux := 0.0; uy := 1.0; uz := 0.0;
   lx := 0.0; ly := 0.0; lz := 0.0; lraza := 0.0; lputere := 0.0; lcul := 0;
+  n4 := 0; gseq := 0; tk := 0; tn := 0; tf := -1; pixelat := 0;
+  WHILE tk < NT DO tgen[tk] := 0; tlat[tk] := 0; tina[tk] := 0; INC(tk) END; tk := 0;
   Litere
-END OllGL6.
+END OllGL7.

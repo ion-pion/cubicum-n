@@ -1,4 +1,7 @@
-MODULE Gazda3;  (* GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its apps by itself as soon as it finds the host
+MODULE Gazda4;  (* GAZDA 4 (20 Nov 2026, Cubicum N 18): files between the phone and Cubicum N (window ecran-cubn18.dex).
+     Import: imp-go -> the phone's file picker; the file comes into HOME (a photo also as NAME.ppm for IMAGES); imp-ok.txt.
+     Export: exp.txt + exp-go -> Download/CubicumN on the phone; exp-ok.txt. With no host both say NO HOST.
+   GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its apps by itself as soon as it finds the host
      (during the boot screen), and reads the icons a little in every frame, so nothing stops: the names come at once,
      the icons fill in. Pion: "it takes time to load JAHBALON, there are many".
    GAZDA 2 (19 Nov 2026, Cubicum N 16): icons of 32 x 32 (the window ecran-cubn16.dex sends them so;
@@ -24,7 +27,9 @@ MODULE Gazda3;  (* GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its ap
     ico: ARRAY NA * IC * IC OF INTEGER;   (* RGB(..) or 0 = see-through (RGB never gives 0; white is -1) *)
     na, bat, sdk, t0, tStare, tCeas, tCere, tTry: INTEGER;
     charging, hosted, waiting, loaded, autoAsked: BOOLEAN;
-    hIco, icoPos: INTEGER;   (* the icons file while it is being read; how many pixels are in *)
+    hIco, icoPos: INTEGER;
+    impSt, expSt, tImp, tExp: INTEGER;   (* 0 nothing, 1 waiting, 2 done, 3 failed *)
+    impName, impPpm, expPath, dummy: ARRAY 64 OF CHAR;   (* the icons file while it is being read; how many pixels are in *)
     android, model: ARRAY 40 OF CHAR;
     ceas: ARRAY 8 OF INTEGER;   (* year month day hour minute second weekday (0 = Monday) *)
     line: ARRAY 200 OF CHAR;
@@ -164,6 +169,65 @@ MODULE Gazda3;  (* GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its ap
     waiting := TRUE; tCere := Ceas.Ms(); tTry := tCere
   END Ask;
 
+  PROCEDURE Signal(nm: ARRAY OF CHAR);
+    VAR h: INTEGER;
+  BEGIN h := Fisier.Creeaza(nm); IF h >= 0 THEN Fisier.Scrie(h, 49); Fisier.Gata(h) END
+  END Signal;
+
+  PROCEDURE Import*;   (* the phone's file picker *)
+  BEGIN
+    IF hosted THEN Fisier.Sterge("imp-ok.txt"); Signal("imp-go"); impSt := 1; tImp := Ceas.Ms() ELSE impSt := 3 END;
+    impName[0] := 0X; impPpm[0] := 0X
+  END Import;
+
+  PROCEDURE Export*(nm: ARRAY OF CHAR);   (* file nm of HOME to Download/CubicumN *)
+    VAR h, i: INTEGER;
+  BEGIN
+    expPath[0] := 0X;
+    IF hosted THEN
+      Fisier.Sterge("exp-ok.txt"); h := Fisier.Creeaza("exp.txt");
+      IF h >= 0 THEN
+        i := 0; WHILE (i < LEN(nm)) & (nm[i] # 0X) DO Fisier.Scrie(h, ORD(nm[i])); INC(i) END; Fisier.Scrie(h, 10); Fisier.Gata(h);
+        Signal("exp-go"); expSt := 1; tExp := Ceas.Ms()
+      ELSE expSt := 3
+      END
+    ELSE expSt := 3
+    END
+  END Export;
+
+  PROCEDURE Result(nm: ARRAY OF CHAR; VAR st: INTEGER; VAR a, b: ARRAY OF CHAR);   (* "1 a [b]" or "0 why" *)
+    VAR h: INTEGER;
+  BEGIN
+    h := Fisier.Deschide(nm);
+    IF h >= 0 THEN
+      IF ReadLine(h) THEN
+        IF line[0] = "1" THEN st := 2; Word(1, a); Word(2, b) ELSE st := 3; Word(1, a) END
+      ELSE st := 3
+      END;
+      Fisier.Gata(h); Fisier.Sterge(nm)
+    END
+  END Result;
+
+  PROCEDURE ImportState*(): INTEGER; BEGIN RETURN impSt END ImportState;
+  PROCEDURE ExportState*(): INTEGER; BEGIN RETURN expSt END ExportState;
+  PROCEDURE ImportDone*; BEGIN impSt := 0 END ImportDone;
+  PROCEDURE ExportDone*; BEGIN expSt := 0 END ExportDone;
+
+  PROCEDURE ImportName*(VAR s: ARRAY OF CHAR);   (* the file that came in *)
+    VAR i: INTEGER;
+  BEGIN i := 0; WHILE (impName[i] # 0X) & (i < LEN(s) - 1) DO s[i] := impName[i]; INC(i) END; s[i] := 0X
+  END ImportName;
+
+  PROCEDURE ImportPpm*(VAR s: ARRAY OF CHAR);   (* its picture for IMAGES, or "" *)
+    VAR i: INTEGER;
+  BEGIN i := 0; WHILE (impPpm[i] # 0X) & (i < LEN(s) - 1) DO s[i] := impPpm[i]; INC(i) END; s[i] := 0X
+  END ImportPpm;
+
+  PROCEDURE ExportPath*(VAR s: ARRAY OF CHAR);   (* where it went on the phone *)
+    VAR i: INTEGER;
+  BEGIN i := 0; WHILE (expPath[i] # 0X) & (i < LEN(s) - 1) DO s[i] := expPath[i]; INC(i) END; s[i] := 0X
+  END ExportPath;
+
   PROCEDURE Poll*;   (* every frame; it reads the files only now and then *)
     VAR now: INTEGER;
   BEGIN
@@ -172,6 +236,8 @@ MODULE Gazda3;  (* GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its ap
     IF now - tStare >= 3000 THEN ReadStare; tStare := now END;
     IF hosted & ~autoAsked THEN autoAsked := TRUE; IF ~loaded & ~waiting THEN Ask END END;   (* at once: during the boot *)
     IF hIco >= 0 THEN ReadIcons(3072) END;
+    IF (impSt = 1) & (now - tImp > 400) THEN tImp := now; Result("imp-ok.txt", impSt, impName, impPpm) END;
+    IF (expSt = 1) & (now - tExp > 300) THEN tExp := now; Result("exp-ok.txt", expSt, expPath, dummy) END;
     IF waiting & (now - tTry >= 300) THEN
       tTry := now;
       IF ReadApps() THEN waiting := FALSE; loaded := TRUE
@@ -324,7 +390,7 @@ MODULE Gazda3;  (* GAZDA 3 (19 Nov 2026, Cubicum N 17): asks the host for its ap
 
 BEGIN
   na := 0; bat := -1; sdk := 0; charging := FALSE; hosted := FALSE; waiting := FALSE; loaded := FALSE; autoAsked := FALSE;
-  hIco := -1; icoPos := 0;
+  hIco := -1; icoPos := 0; impSt := 0; expSt := 0; tImp := 0; tExp := 0; impName[0] := 0X; impPpm[0] := 0X; expPath[0] := 0X;
   android[0] := 0X; model[0] := 0X; t0 := Ceas.Ms(); tStare := t0 - 5000; tCeas := t0 - 1000; tCere := t0; tTry := t0;
   ceas[0] := 0; ceas[1] := 0; ceas[2] := 0; ceas[3] := 0; ceas[4] := 0; ceas[5] := 0; ceas[6] := 0
-END Gazda3.
+END Gazda4.
